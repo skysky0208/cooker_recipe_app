@@ -1,26 +1,19 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { styled } from '@mui/system';
 import { Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+
+import { CustomCard, CustomCardHeader } from 'features/Auth/SignIn/styles';
 
 import { AuthContext } from 'App';
 import AlertMessage from 'components/AlertMessage';
 import { signIn } from 'lib/api/auth';
 import { SignInParams } from 'interfaces/index';
-
-const CustomCard = styled(Card)(({ theme }) => ({
-    marginTop: theme.spacing(6),
-    padding: theme.spacing(2),
-    maxWidth: 500,
-}));
 
 // サインイン用ページ
 const SignIn = () => {
@@ -69,13 +62,18 @@ const SignIn = () => {
         <>
             <form noValidate autoComplete="off">
                 <CustomCard>
-                    <CardHeader title="Sign In" style={{ textAlign: 'center' }} />
+                    <CustomCardHeader
+                        avatar={
+                            <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="logo" style={{ margin: '0 auto' }} />
+                        }
+                    />
                     <CardContent>
                         <TextField
                             variant="outlined"
                             required
                             fullWidth
-                            label="Email"
+                            size="small"
+                            label="メールアドレス"
                             value={email}
                             margin="dense"
                             onChange={(event) => setEmail(event.target.value)}
@@ -84,9 +82,9 @@ const SignIn = () => {
                             variant="outlined"
                             required
                             fullWidth
-                            label="Password"
+                            label="パスワード"
+                            size="small"
                             type="password"
-                            placeholder="At least 6 characters"
                             value={password}
                             margin="dense"
                             autoComplete="current-password"
@@ -96,21 +94,31 @@ const SignIn = () => {
                             type="submit"
                             variant="contained"
                             size="large"
+                            style={{ marginTop: '20px' }}
                             fullWidth
                             disabled={!email || !password ? true : false} // 空欄があった場合はボタンを押せないように
                             onClick={handleSubmit}
                         >
-                            Submit
+                            ログイン
                         </Button>
-                        <Box textAlign="center">
-                            <Typography variant="body2">
-                                Don't have an account? &nbsp;
-                                <Link to="/signup">Sign Up now!</Link>
-                            </Typography>
+
+                        <Box textAlign="center" style={{ marginTop: '40px' }}>
+                            <Typography variant="body1">初めてご利用の方はこちら</Typography>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                size="large"
+                                style={{ marginTop: '10px' }}
+                                fullWidth
+                                onClick={handleSubmit}
+                            >
+                                ユーザ登録
+                            </Button>
                         </Box>
                     </CardContent>
                 </CustomCard>
             </form>
+
             <AlertMessage // エラーが発生した場合はアラートを表示
                 open={alertMessageOpen}
                 setOpen={setAlertMessageOpen}

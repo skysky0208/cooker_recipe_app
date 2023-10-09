@@ -1,29 +1,16 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { styled } from '@mui/system';
-import TextField from '@mui/material/TextField';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Button from '@mui/material/Button';
+import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
+import { CustomCard, CustomCardHeader } from 'features/Auth/SignUp/styles';
 
-import { AuthContext } from 'App';
 import AlertMessage from 'components/AlertMessage';
 import { signUp } from 'lib/api/auth';
 import { SignUpParams } from 'interfaces/index';
 
-const CustomCard = styled(Card)(({ theme }) => ({
-    marginTop: theme.spacing(6),
-    padding: theme.spacing(2),
-    maxWidth: 500,
-}));
-
 // サインアップ用ページ
 const SignUp = () => {
     const navigate = useNavigate();
-    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
 
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
@@ -71,30 +58,40 @@ const SignUp = () => {
         <>
             <form noValidate autoComplete="off">
                 <CustomCard>
-                    <CardHeader style={{ textAlign: 'center' }} title="Sign Up" />
+                    <CustomCardHeader title="新規会員登録" style={{ textAlign: 'center' }} />
                     <CardContent>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    style={{ marginRight: '20px' }}
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="姓"
+                                    size="small"
+                                    value={lastName}
+                                    margin="dense"
+                                    onChange={(event) => setLastName(event.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    label="名"
+                                    size="small"
+                                    value={firstName}
+                                    margin="dense"
+                                    onChange={(event) => setFirstName(event.target.value)}
+                                />
+                            </Grid>
+                        </Grid>
                         <TextField
                             variant="outlined"
                             required
                             fullWidth
-                            label="姓"
-                            value={lastName}
-                            margin="dense"
-                            onChange={(event) => setLastName(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="名"
-                            value={firstName}
-                            margin="dense"
-                            onChange={(event) => setFirstName(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
+                            size="small"
                             label="アカウント名"
                             value={nickname}
                             margin="dense"
@@ -104,6 +101,7 @@ const SignUp = () => {
                             variant="outlined"
                             required
                             fullWidth
+                            size="small"
                             label="メールアドレス"
                             value={email}
                             margin="dense"
@@ -113,8 +111,10 @@ const SignUp = () => {
                             variant="outlined"
                             required
                             fullWidth
+                            size="small"
                             label="パスワード"
                             type="password"
+                            placeholder="6文字以上"
                             value={password}
                             margin="dense"
                             autoComplete="current-password"
@@ -124,6 +124,8 @@ const SignUp = () => {
                             variant="outlined"
                             required
                             fullWidth
+                            size="small"
+                            placeholder="6文字以上"
                             label="パスワード（確認用）"
                             type="password"
                             value={passwordConfirmation}
@@ -131,10 +133,27 @@ const SignUp = () => {
                             autoComplete="current-password"
                             onChange={(event) => setPasswordConfirmation(event.target.value)}
                         />
+
+                        <Box textAlign="center" style={{ margin: '30px 0' }}>
+                            <Typography variant="body2">
+                                入力内容送信後に登録認証メールが届きます。
+                                <br />
+                                メール記載のURLにアクセスしていただくことで
+                                <br />
+                                会員登録完了となります。
+                                <br />
+                                <br />
+                                ※メールが届かない場合、
+                                <br />
+                                迷惑メール設定・ドメイン指定受信設定をご確認ください。
+                            </Typography>
+                        </Box>
+
                         <Button
                             type="submit"
-                            variant="outlined"
-                            color="primary"
+                            variant="contained"
+                            size="large"
+                            fullWidth
                             disabled={
                                 !firstName! || !lastName || !nickname || !email || !password || !passwordConfirmation
                                     ? true
@@ -142,8 +161,19 @@ const SignUp = () => {
                             }
                             onClick={handleSubmit}
                         >
-                            送信
+                            登録する
                         </Button>
+                        <Link to="/">
+                            <Button
+                                type="submit"
+                                variant="outlined"
+                                size="large"
+                                style={{ marginTop: '10px' }}
+                                fullWidth
+                            >
+                                キャンセル
+                            </Button>
+                        </Link>
                     </CardContent>
                 </CustomCard>
             </form>
