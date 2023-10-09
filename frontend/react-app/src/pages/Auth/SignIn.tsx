@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
-import { CustomCard, CustomCardHeader } from 'features/Auth/SignIn/styles';
+import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
 
 import { AuthContext } from 'App';
 import AlertMessage from 'components/AlertMessage';
@@ -110,7 +110,9 @@ const SignIn = () => {
                                 size="large"
                                 style={{ marginTop: '10px' }}
                                 fullWidth
-                                onClick={handleSubmit}
+                                onClick={() => {
+                                    navigate('/signup');
+                                }}
                             >
                                 ユーザ登録
                             </Button>

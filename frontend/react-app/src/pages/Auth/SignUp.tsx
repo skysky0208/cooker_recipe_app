@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
-import { CustomCard, CustomCardHeader } from 'features/Auth/SignUp/styles';
+import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
 
 import AlertMessage from 'components/AlertMessage';
 import { signUp } from 'lib/api/auth';
@@ -19,7 +19,7 @@ const SignUp = () => {
     const [password, setPassword] = useState<string>('');
     const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
-    const confirmSuccessUrl = 'http://localhost:3000';
+    const confirmSuccessUrl = 'http://localhost:3000/auth/success';
 
     const generateParams = () => {
         const data: SignUpParams = {
@@ -44,7 +44,7 @@ const SignUp = () => {
 
             if (res.status === 200) {
                 console.log('confirm email');
-                navigate('/');
+                navigate('/auth/send');
             } else {
                 setAlertMessageOpen(true);
             }
@@ -134,7 +134,7 @@ const SignUp = () => {
                             onChange={(event) => setPasswordConfirmation(event.target.value)}
                         />
 
-                        <Box textAlign="center" style={{ margin: '30px 0' }}>
+                        <Box textAlign="center" style={{ margin: '20px 0' }}>
                             <Typography variant="body2">
                                 入力内容送信後に登録認証メールが届きます。
                                 <br />
@@ -163,17 +163,18 @@ const SignUp = () => {
                         >
                             登録する
                         </Button>
-                        <Link to="/">
-                            <Button
-                                type="submit"
-                                variant="outlined"
-                                size="large"
-                                style={{ marginTop: '10px' }}
-                                fullWidth
-                            >
-                                キャンセル
-                            </Button>
-                        </Link>
+                        <Button
+                            type="submit"
+                            variant="outlined"
+                            size="large"
+                            style={{ marginTop: '10px' }}
+                            fullWidth
+                            onClick={() => {
+                                navigate('/');
+                            }}
+                        >
+                            キャンセル
+                        </Button>
                     </CardContent>
                 </CustomCard>
             </form>

@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 import CommonLayout from 'components/layouts/CommonLayout';
 import Home from 'pages/Home';
-import SignIn from 'pages/SignIn';
-import SignUp from 'pages/SignUp';
+import SignIn from 'pages/Auth/SignIn';
+import SignUp from 'pages/Auth/SignUp';
+import EmailSend from 'pages/Auth/EmailSend';
+import AuthSuccess from 'pages/Auth/AuthSuccess';
 
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
@@ -77,6 +79,8 @@ const App = () => {
                     <Routes>
                         <Route path="signup" element={<SignUp />} />
                         <Route path="signin" element={<SignIn />} />
+                        <Route path="auth/send" element={<EmailSend />} />
+                        <Route path="auth/success" element={<AuthSuccess />} />
                         <Route
                             path="/"
                             element={
