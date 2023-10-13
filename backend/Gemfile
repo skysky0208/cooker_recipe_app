@@ -46,3 +46,6 @@ gem 'devise_token_auth'
 
 # HTTP通信
 gem 'rack-cors'
+
+# 画像登録
+gem 'carrierwave'
