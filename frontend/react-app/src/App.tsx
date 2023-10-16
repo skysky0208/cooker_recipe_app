@@ -7,6 +7,7 @@ import SignIn from 'pages/Auth/SignIn';
 import SignUp from 'pages/Auth/SignUp';
 import EmailSend from 'pages/Auth/EmailSend';
 import AuthSuccess from 'pages/Auth/AuthSuccess';
+import CreateRecipe from 'pages/Recipe/CreateRecipe';
 
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
@@ -86,6 +87,14 @@ const App = () => {
                             element={
                                 <Private>
                                     <Home />
+                                </Private>
+                            }
+                        />
+                        <Route
+                            path="/recipes/new"
+                            element={
+                                <Private>
+                                    <CreateRecipe />
                                 </Private>
                             }
                         />

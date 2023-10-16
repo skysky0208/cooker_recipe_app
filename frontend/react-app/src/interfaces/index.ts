@@ -26,3 +26,19 @@ export interface User {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface Recipe {
+    id: number | null;
+    userId?: number;
+    title: string;
+    caption?: string;
+    pressTime: number;
+    preparationTime: number;
+    image?: {
+        url: string;
+    };
+    servings?: number;
+    isActive?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
