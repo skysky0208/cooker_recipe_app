@@ -14,7 +14,7 @@ class Api::V1::RecipesController < ApplicationController
 
     private
         def recipe_params
-            params.permit(:title, :press_time, :preparation_time)
+            params.permit(:title, :press_time, :preparation_time, :image)
         end
 
 end

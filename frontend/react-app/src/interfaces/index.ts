@@ -42,3 +42,14 @@ export interface Recipe {
     createdAt?: Date;
     updatedAt?: Date;
 }
+
+export interface CreateRecipeData {
+    title: string;
+    pressTime: number;
+    preparationTime: number;
+    image: string;
+}
+
+export interface CreateRecipeFormData extends FormData {
+    append(name: keyof CreateRecipeData, value: String | Blob, fileName?: string): any;
+}

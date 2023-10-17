@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_202844) do
     t.integer "preparation_time", null: false
     t.integer "servings"
     t.boolean "is_activate", default: false
+    t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

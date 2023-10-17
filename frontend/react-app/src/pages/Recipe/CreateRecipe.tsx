@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
@@ -6,7 +6,7 @@ import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
 
 import AlertMessage from 'components/AlertMessage';
 import { AuthContext } from 'App';
-import { Recipe } from 'interfaces';
+import { CreateRecipeFormData } from 'interfaces';
 import { createRecipe } from 'lib/api/recipes';
 
 const CreateRecipe = () => {
@@ -14,36 +14,50 @@ const CreateRecipe = () => {
 
     const { currentUser } = useContext(AuthContext);
 
-    const [formValue, setFormValue] = useState<Recipe>({
-        id: null,
-        title: '',
-        pressTime: 0,
-        preparationTime: 0,
-    });
+    const [title, setTitle] = useState<string>('');
+    const [pressTime, setPressTime] = useState<number>(0);
+    const [preparationTime, setPreparationTime] = useState<number>(0);
+    const [image, setImage] = useState<string>('');
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+    const [preview, setPreview] = useState<string>('');
+
+    // アップロードした画像のデータを取得
+    const uploadImage = useCallback((e: any) => {
+        const file = e.target.files[0];
+        setImage(file);
+    }, []);
+
+    // 画像プレビューを表示
+    const previewImage = useCallback((e: any) => {
+        const file = e.target.files[0];
+        setPreview(window.URL.createObjectURL(file));
+    }, []);
+
+    // フォームデータを作成
+    const createFormData = (): CreateRecipeFormData => {
+        const formData = new FormData();
+
+        formData.append('title', title);
+        formData.append('pressTime', pressTime.toString());
+        formData.append('preparationTime', preparationTime.toString());
+        formData.append('image', image);
+
+        return formData;
+    };
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        const data: Recipe = {
-            id: formValue.id,
-            userId: currentUser?.id,
-            title: formValue.title,
-            pressTime: formValue.pressTime,
-            preparationTime: formValue.preparationTime,
-        };
+        const data = createFormData();
 
         try {
             const res = await createRecipe(data);
             console.log(res);
 
             if (res.status === 200) {
-                setFormValue({
-                    id: null,
-                    title: '',
-                    pressTime: 0,
-                    preparationTime: 0,
-                });
+                setTitle('');
+                setPressTime(0);
+                setPreparationTime(0);
                 navigate('/');
             } else {
                 setAlertMessageOpen(true);
@@ -67,15 +81,38 @@ const CreateRecipe = () => {
                             fullWidth
                             label="レシピのタイトル"
                             size="small"
-                            value={formValue.title}
+                            value={title}
                             margin="dense"
-                            onChange={(event) =>
-                                setFormValue({
-                                    ...formValue,
-                                    title: event.target.value,
-                                })
-                            }
+                            onChange={(event) => setTitle(event.target.value)}
                         />
+
+                        <div>
+                            <label htmlFor="file-button">
+                                {preview ? (
+                                    <img
+                                        src={preview}
+                                        alt="preview img"
+                                        style={{ margin: '0 auto', width: '450px', height: '300px' }}
+                                    />
+                                ) : (
+                                    <img
+                                        src={`${process.env.PUBLIC_URL}/sample-recipe-img.png`}
+                                        alt="sample"
+                                        style={{ margin: '0 auto', width: '450px', height: '300px' }}
+                                    />
+                                )}
+                            </label>
+                            <input
+                                accept="image/*"
+                                id="file-button"
+                                type="file"
+                                style={{ display: 'none' }}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    uploadImage(e);
+                                    previewImage(e);
+                                }}
+                            />
+                        </div>
 
                         <TextField
                             style={{ marginRight: '20px' }}
@@ -84,15 +121,10 @@ const CreateRecipe = () => {
                             fullWidth
                             label="準備時間"
                             size="small"
-                            value={formValue.preparationTime}
+                            value={preparationTime}
                             margin="dense"
                             type="number"
-                            onChange={(event) =>
-                                setFormValue({
-                                    ...formValue,
-                                    preparationTime: parseInt(event.target.value, 10),
-                                })
-                            }
+                            onChange={(event) => setPreparationTime(parseInt(event.target.value, 10))}
                         />
 
                         <TextField
@@ -102,15 +134,10 @@ const CreateRecipe = () => {
                             fullWidth
                             label="加圧時間"
                             size="small"
-                            value={formValue.pressTime}
+                            value={pressTime}
                             margin="dense"
                             type="number"
-                            onChange={(event) =>
-                                setFormValue({
-                                    ...formValue,
-                                    pressTime: parseInt(event.target.value, 10),
-                                })
-                            }
+                            onChange={(event) => setPressTime(parseInt(event.target.value, 10))}
                             inputProps={{
                                 inputMode: 'numeric',
                                 pattern: '[0-9]*',
@@ -122,10 +149,10 @@ const CreateRecipe = () => {
                             variant="contained"
                             size="large"
                             fullWidth
-                            disabled={!formValue.title ? true : false}
+                            disabled={!title || !pressTime || !preparationTime ? true : false}
                             onClick={handleSubmit}
                         >
-                            登録する
+                            材料や手順を記入する
                         </Button>
                         <Button
                             type="submit"
