@@ -29,16 +29,16 @@ export interface User {
 
 export interface Recipe {
     id: number | null;
-    userId?: number;
+    userId: number;
     title: string;
-    caption?: string;
+    caption: string;
     pressTime: number;
     preparationTime: number;
-    image?: {
+    image: {
         url: string;
     };
-    servings?: number;
-    isActive?: boolean;
+    servings: number;
+    isActive: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -51,5 +51,20 @@ export interface CreateRecipeData {
 }
 
 export interface CreateRecipeFormData extends FormData {
+    append(name: keyof CreateRecipeData, value: String | Blob, fileName?: string): any;
+}
+
+export interface UpdateRecipeData {
+    id: number | undefined | null;
+    title?: string;
+    caption?: string;
+    pressTime?: number;
+    preparationTime?: number;
+    image?: string;
+    servings?: number;
+    isActive?: boolean;
+}
+
+export interface UpdateRecipeFormData extends FormData {
     append(name: keyof CreateRecipeData, value: String | Blob, fileName?: string): any;
 }

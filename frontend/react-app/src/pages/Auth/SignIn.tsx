@@ -46,7 +46,7 @@ const SignIn = () => {
                 setIsSignedIn(true);
                 setCurrentUser(res.data.data);
 
-                navigate('/');
+                navigate('/', { replace: true });
 
                 console.log('Signed in successfully!');
             } else {

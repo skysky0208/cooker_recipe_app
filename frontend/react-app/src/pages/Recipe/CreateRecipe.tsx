@@ -21,16 +21,14 @@ const CreateRecipe = () => {
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
     const [preview, setPreview] = useState<string>('');
 
-    // アップロードした画像のデータを取得
-    const uploadImage = useCallback((e: any) => {
-        const file = e.target.files[0];
-        setImage(file);
-    }, []);
-
     // 画像プレビューを表示
     const previewImage = useCallback((e: any) => {
         const file = e.target.files[0];
-        setPreview(window.URL.createObjectURL(file));
+        if (file) {
+            const blob = new Blob([file], { type: file.type });
+            setPreview(window.URL.createObjectURL(blob));
+            setImage(file);
+        }
     }, []);
 
     // フォームデータを作成
@@ -58,7 +56,7 @@ const CreateRecipe = () => {
                 setTitle('');
                 setPressTime(0);
                 setPreparationTime(0);
-                navigate('/');
+                navigate(`/recipes/${res.data.id}/edit`);
             } else {
                 setAlertMessageOpen(true);
             }
@@ -108,7 +106,6 @@ const CreateRecipe = () => {
                                 type="file"
                                 style={{ display: 'none' }}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    uploadImage(e);
                                     previewImage(e);
                                 }}
                             />
@@ -125,6 +122,10 @@ const CreateRecipe = () => {
                             margin="dense"
                             type="number"
                             onChange={(event) => setPreparationTime(parseInt(event.target.value, 10))}
+                            inputProps={{
+                                inputMode: 'numeric',
+                                pattern: '[0-9]*',
+                            }}
                         />
 
                         <TextField

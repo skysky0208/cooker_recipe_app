@@ -8,7 +8,7 @@ import SignUp from 'pages/Auth/SignUp';
 import EmailSend from 'pages/Auth/EmailSend';
 import AuthSuccess from 'pages/Auth/AuthSuccess';
 import CreateRecipe from 'pages/Recipe/CreateRecipe';
-
+import EditRecipe from 'pages/Recipe/EditRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
 
@@ -95,6 +95,14 @@ const App = () => {
                             element={
                                 <Private>
                                     <CreateRecipe />
+                                </Private>
+                            }
+                        />
+                        <Route
+                            path="/recipes/:id/edit"
+                            element={
+                                <Private>
+                                    <EditRecipe />
                                 </Private>
                             }
                         />

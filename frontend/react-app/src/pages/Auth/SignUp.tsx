@@ -44,7 +44,7 @@ const SignUp = () => {
 
             if (res.status === 200) {
                 console.log('confirm email');
-                navigate('/auth/send');
+                navigate('/auth/send', { replace: true });
             } else {
                 setAlertMessageOpen(true);
             }
