@@ -55,7 +55,6 @@ export interface CreateRecipeFormData extends FormData {
 }
 
 export interface UpdateRecipeData {
-    id: number | undefined | null;
     title?: string;
     caption?: string;
     pressTime?: number;
@@ -66,5 +65,5 @@ export interface UpdateRecipeData {
 }
 
 export interface UpdateRecipeFormData extends FormData {
-    append(name: keyof CreateRecipeData, value: String | Blob, fileName?: string): any;
+    append(name: keyof UpdateRecipeData, value: String | Blob, fileName?: string): any;
 }

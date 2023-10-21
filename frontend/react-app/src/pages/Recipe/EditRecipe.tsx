@@ -12,11 +12,10 @@ import {
     FormLabel,
     FormControlLabel,
 } from '@mui/material';
-import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
 
 import AlertMessage from 'components/AlertMessage';
 import { AuthContext } from 'App';
-import { UpdateRecipeFormData } from 'interfaces';
+import { UpdateRecipeFormData, Recipe } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
 
 const EditRecipe = () => {
@@ -26,17 +25,18 @@ const EditRecipe = () => {
 
     const [loading, setLoading] = useState<boolean>(true);
 
+    const [recipe, setRecipe] = useState<Recipe>();
     const [title, setTitle] = useState<string>('');
     const [pressTime, setPressTime] = useState<number>(0);
     const [preparationTime, setPreparationTime] = useState<number>(0);
-    const [image, setImage] = useState({ url: '' });
+    const [image, setImage] = useState<File>();
     const [caption, setCaption] = useState<string>('');
     const [servings, setServings] = useState<number>(0);
     const [isActive, setIsActive] = useState<boolean>(false);
     const [preview, setPreview] = useState<string>('');
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
-    const createFormData = (): UpdateRecipeFormData => {
+    const updateFormData = (): UpdateRecipeFormData => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('caption', caption);
@@ -44,17 +44,25 @@ const EditRecipe = () => {
         formData.append('preparationTime', preparationTime.toString());
         formData.append('servings', servings.toString());
         formData.append('isActive', isActive.toString());
-        formData.append('image', image.toString());
+        if (image) formData.append('image', image);
+        console.log(formData);
         return formData;
     };
 
-    // 画像プレビューを表示
+    // アップロードした画像の情報を取得
+    const uploadImage = useCallback((e: any) => {
+        const file = e.target.files[0];
+        console.log(file);
+        if (file) {
+            setImage(file);
+        }
+    }, []);
+
+    // 画像プレビュー
     const previewImage = useCallback((e: any) => {
         const file = e.target.files[0];
         if (file) {
-            const blob = new Blob([file], { type: file.type });
-            setPreview(window.URL.createObjectURL(blob));
-            setImage(file);
+            setPreview(window.URL.createObjectURL(file));
         }
     }, []);
 
@@ -67,12 +75,12 @@ const EditRecipe = () => {
                 setTitle(res.data.recipe.title);
                 setPressTime(res.data.recipe.pressTime);
                 setPreparationTime(res.data.recipe.preparationTime);
-                setImage(res.data.recipe.image);
                 setCaption(res.data.recipe.caption || '');
                 setServings(res.data.recipe.servings || undefined);
-                setIsActive(res.data.recipe.isActivate);
+                setIsActive(res.data.recipe.isActive);
+                setRecipe(res.data.recipe);
             } else {
-                console.log('No current user');
+                console.log('No recipe');
             }
         } catch (err) {
             console.log(err);
@@ -84,9 +92,10 @@ const EditRecipe = () => {
     const handleUpdateRecipe = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        const data = createFormData();
+        const data = updateFormData();
 
         try {
+            console.log(data);
             const res = await updateRecipe(id, data);
             console.log(res);
 
@@ -129,7 +138,7 @@ const EditRecipe = () => {
                             />
                         ) : (
                             <img
-                                src={image.url}
+                                src={recipe?.image.url}
                                 alt="preview img"
                                 style={{ margin: '0 auto', width: '450px', height: '300px' }}
                             />
@@ -142,6 +151,7 @@ const EditRecipe = () => {
                         style={{ display: 'none' }}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             previewImage(e);
+                            uploadImage(e);
                         }}
                     />
 
@@ -216,8 +226,15 @@ const EditRecipe = () => {
                         disabled={!title || !pressTime || !preparationTime ? true : false}
                         onClick={handleUpdateRecipe}
                     >
-                        材料や手順を記入する
+                        保存する
                     </Button>
+
+                    <AlertMessage // エラーが発生した場合はアラートを表示
+                        open={alertMessageOpen}
+                        setOpen={setAlertMessageOpen}
+                        severity="error"
+                        message="保存できませんでした"
+                    />
                 </Box>
             ) : (
                 <></>

@@ -17,7 +17,7 @@ const CreateRecipe = () => {
     const [title, setTitle] = useState<string>('');
     const [pressTime, setPressTime] = useState<number>(0);
     const [preparationTime, setPreparationTime] = useState<number>(0);
-    const [image, setImage] = useState<string>('');
+    const [image, setImage] = useState<File>();
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
     const [preview, setPreview] = useState<string>('');
 
@@ -38,7 +38,7 @@ const CreateRecipe = () => {
         formData.append('title', title);
         formData.append('pressTime', pressTime.toString());
         formData.append('preparationTime', preparationTime.toString());
-        formData.append('image', image);
+        if (image) formData.append('image', image);
 
         return formData;
     };
