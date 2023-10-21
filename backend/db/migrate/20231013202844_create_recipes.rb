@@ -7,7 +7,7 @@ class CreateRecipes < ActiveRecord::Migration[6.1]
       t.integer :press_time, null: false
       t.integer :preparation_time, null: false
       t.integer :servings
-      t.boolean :is_activate, default: false
+      t.boolean :is_active, default: false
       t.string :image
 
       t.timestamps
