@@ -2,16 +2,10 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { Typography } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-
-import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
+import { EmailForm, PasswordForm } from 'features/Auth/components/index';
+import AlertMessage from 'components/AlertMessage';
 
 import { AuthContext } from 'App';
-import AlertMessage from 'components/AlertMessage';
 import { signIn } from 'lib/api/auth';
 import { SignInParams } from 'interfaces/index';
 
@@ -60,66 +54,47 @@ const SignIn = () => {
 
     return (
         <>
-            <form noValidate autoComplete="off">
-                <CustomCard>
-                    <CustomCardHeader
-                        avatar={
-                            <img src={`${process.env.PUBLIC_URL}/logo.png`} alt="logo" style={{ margin: '0 auto' }} />
-                        }
-                    />
-                    <CardContent>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            size="small"
-                            label="メールアドレス"
-                            value={email}
-                            margin="dense"
-                            onChange={(event) => setEmail(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="パスワード"
-                            size="small"
-                            type="password"
-                            value={password}
-                            margin="dense"
-                            autoComplete="current-password"
-                            onChange={(event) => setPassword(event.target.value)}
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            style={{ marginTop: '20px' }}
-                            fullWidth
-                            disabled={!email || !password ? true : false} // 空欄があった場合はボタンを押せないように
-                            onClick={handleSubmit}
-                        >
-                            ログイン
-                        </Button>
+            <div className="w-full md:w-1/2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="p-4 sm:p-7">
+                    <div className="text-center">
+                        <h1 className="block text-xl md:text-2xl text-center font-bold text-neutral-600">ログイン</h1>
+                    </div>
 
-                        <Box textAlign="center" style={{ marginTop: '40px' }}>
-                            <Typography variant="body1">初めてご利用の方はこちら</Typography>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                size="large"
-                                style={{ marginTop: '10px' }}
-                                fullWidth
-                                onClick={() => {
-                                    navigate('/signup');
-                                }}
-                            >
-                                ユーザ登録
-                            </Button>
-                        </Box>
-                    </CardContent>
-                </CustomCard>
-            </form>
+                    <div className="mt-5">
+                        <form>
+                            <div className="grid gap-y-4">
+                                <EmailForm email={email} setEmail={setEmail} />
+                                <PasswordForm password={password} setPassword={setPassword} />
+
+                                <button
+                                    type="submit"
+                                    onClick={handleSubmit}
+                                    className=" md:mt-4 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300 transition-all text-sm"
+                                >
+                                    ログイン
+                                </button>
+
+                                <div className="flex items-center justify-between md:mt-4">
+                                    <span className="w-1/5 border-b dark:border-gray-600 lg:w-2/6"></span>
+                                    <p className="text-xs text-center text-gray-500 uppercase">
+                                        初めてご利用の方はこちら
+                                    </p>
+                                    <span className="w-1/5 border-b dark:border-gray-400 lg:w-2/6"></span>
+                                </div>
+
+                                <button
+                                    onClick={() => {
+                                        navigate('/signup');
+                                    }}
+                                    className=" md:mt-4 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-gray-400 font-semibold text-gray-700 hover:bg-gray-100 transition-all text-sm"
+                                >
+                                    ユーザ登録
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
             <AlertMessage // エラーが発生した場合はアラートを表示
                 open={alertMessageOpen}

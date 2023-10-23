@@ -4,7 +4,7 @@ const Header = () => {
     return (
         <>
             <header className="text-neutral-600 body-font">
-                <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+                <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
                     <a href="/" className="flex items-center mb-3 md:mb-0">
                         <img src={`${process.env.PUBLIC_URL}/logo_header.png`} alt="logo" className="w-50" />
                     </a>
