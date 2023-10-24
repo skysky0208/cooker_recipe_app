@@ -1,22 +1,14 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react';
+// import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import {
-    Typography,
-    Button,
-    Box,
-    TextField,
-    FormControl,
-    RadioGroup,
-    Radio,
-    FormLabel,
-    FormControlLabel,
-} from '@mui/material';
-
 import AlertMessage from 'components/AlertMessage';
+import { RecipeNameInput, RecipeTimeInput, RecipeActiveInput } from 'features/Recipe/components';
+
 import { AuthContext } from 'App';
 import { UpdateRecipeFormData, Recipe } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
+import { zenkaku2Hankaku } from 'features/Recipe/function';
 
 const EditRecipe = () => {
     const navigate = useNavigate();
@@ -27,11 +19,11 @@ const EditRecipe = () => {
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [title, setTitle] = useState<string>('');
-    const [pressTime, setPressTime] = useState<number>(0);
-    const [preparationTime, setPreparationTime] = useState<number>(0);
+    const [pressTime, setPressTime] = useState<number | string>(0);
+    const [preparationTime, setPreparationTime] = useState<number | string>(0);
     const [image, setImage] = useState<File>();
     const [caption, setCaption] = useState<string>('');
-    const [servings, setServings] = useState<number>(0);
+    const [servings, setServings] = useState<number | string>('');
     const [isActive, setIsActive] = useState<boolean>(false);
     const [preview, setPreview] = useState<string>('');
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
@@ -47,6 +39,12 @@ const EditRecipe = () => {
         if (image) formData.append('image', image);
         console.log(formData);
         return formData;
+    };
+
+    const handleNumFromChange = (event: any, setValue: React.Dispatch<React.SetStateAction<number | string>>) => {
+        const inputValue = zenkaku2Hankaku(event.target.value);
+        const parsedValue = isNaN(parseFloat(inputValue)) ? '' : parseFloat(inputValue);
+        setValue(parsedValue);
     };
 
     // アップロードした画像の情報を取得
@@ -117,125 +115,107 @@ const EditRecipe = () => {
     return (
         <>
             {!loading ? (
-                <Box>
-                    <TextField
-                        style={{ marginRight: '20px' }}
-                        variant="outlined"
-                        required
-                        fullWidth
-                        size="small"
-                        value={title || ''}
-                        margin="dense"
-                        onChange={(event) => setTitle(event.target.value)}
-                    />
+                <div className="w-full md:w-3/4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <form>
+                        <div className="p-4 sm:p-7 flex justify-center ">
+                            <div className="grid gap-y-4 w-full">
+                                <RecipeNameInput title={title} setTitle={setTitle} />
+                                <div>
+                                    <label
+                                        htmlFor="file-button"
+                                        className="cursor-pointer block mx-auto w-72 h-48 border border-gray-300 relative"
+                                    >
+                                        {preview ? (
+                                            <img
+                                                src={preview}
+                                                alt="preview img"
+                                                className="object-cover w-full h-full"
+                                            />
+                                        ) : (
+                                            <img
+                                                src={recipe?.image.url}
+                                                alt="preview img"
+                                                className="object-cover w-full h-full"
+                                            />
+                                        )}
+                                        <input
+                                            accept="image/*"
+                                            id="file-button"
+                                            type="file"
+                                            className="hidden"
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                previewImage(e);
+                                                uploadImage(e);
+                                            }}
+                                        />
+                                    </label>
+                                </div>
 
-                    <label htmlFor="file-button">
-                        {preview ? (
-                            <img
-                                src={preview}
-                                alt="preview img"
-                                style={{ margin: '0 auto', width: '450px', height: '300px' }}
-                            />
-                        ) : (
-                            <img
-                                src={recipe?.image.url}
-                                alt="preview img"
-                                style={{ margin: '0 auto', width: '450px', height: '300px' }}
-                            />
-                        )}
-                    </label>
-                    <input
-                        accept="image/*"
-                        id="file-button"
-                        type="file"
-                        style={{ display: 'none' }}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            previewImage(e);
-                            uploadImage(e);
-                        }}
-                    />
+                                <RecipeTimeInput
+                                    preparationTime={preparationTime}
+                                    pressTime={pressTime}
+                                    setPreparationTime={setPreparationTime}
+                                    setPressTime={setPressTime}
+                                />
+                                <div>
+                                    <label
+                                        htmlFor="caption"
+                                        className="block p-1 m-2 w-28 text-center bg-orange-200 rounded-md"
+                                    >
+                                        説明文
+                                    </label>
+                                    <textarea
+                                        value={caption}
+                                        onChange={(event) => setCaption(event.target.value)}
+                                        id="caption"
+                                        rows={4}
+                                        className="block p-2.5 w-4/5 mx-auto  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+                                        placeholder="レシピの説明文をここに記入してください"
+                                    ></textarea>
+                                </div>
 
-                    <TextField
-                        style={{ marginRight: '20px' }}
-                        variant="outlined"
-                        required
-                        fullWidth
-                        label="準備時間"
-                        size="small"
-                        value={preparationTime}
-                        margin="dense"
-                        type="number"
-                        onChange={(event) => setPreparationTime(parseInt(event.target.value, 10))}
-                    />
-
-                    <TextField
-                        style={{ marginRight: '20px' }}
-                        variant="outlined"
-                        required
-                        fullWidth
-                        label="加圧時間"
-                        size="small"
-                        value={pressTime}
-                        margin="dense"
-                        type="number"
-                        onChange={(event) => setPressTime(parseInt(event.target.value, 10))}
-                    />
-
-                    <TextField
-                        style={{ marginRight: '20px' }}
-                        variant="outlined"
-                        required
-                        fullWidth
-                        size="small"
-                        value={caption || ''}
-                        margin="dense"
-                        onChange={(event) => setCaption(event.target.value)}
-                    />
-
-                    <TextField
-                        style={{ marginRight: '20px' }}
-                        variant="outlined"
-                        required
-                        fullWidth
-                        label="人分"
-                        size="small"
-                        value={servings}
-                        margin="dense"
-                        type="number"
-                        onChange={(event) => setServings(parseInt(event.target.value, 10))}
-                    />
-
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">公開設定</FormLabel>
-                        <RadioGroup
-                            aria-label="gender"
-                            name="gender1"
-                            value={isActive}
-                            onChange={(event) => setIsActive(event.target.value === 'true')}
-                        >
-                            <FormControlLabel value="true" control={<Radio />} label="公開" />
-                            <FormControlLabel value="false" control={<Radio />} label="非公開" />
-                        </RadioGroup>
-                    </FormControl>
-
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        fullWidth
-                        disabled={!title || !pressTime || !preparationTime ? true : false}
-                        onClick={handleUpdateRecipe}
-                    >
-                        保存する
-                    </Button>
-
+                                <div className="flex">
+                                    <div className="flex justify-between w-5/12">
+                                        <label
+                                            htmlFor="servings"
+                                            className="p-1 m-2 w-20 text-center bg-orange-200 rounded-md"
+                                        >
+                                            材料
+                                        </label>
+                                        <div className="inline m-1">
+                                            <input
+                                                type="string"
+                                                value={servings}
+                                                onChange={(event) => handleNumFromChange(event, setServings)}
+                                                id="servings"
+                                                name="servings"
+                                                className="p-2 ml-2 w-12 border border-gray-200 bg-gray-50 rounded-md text-sm"
+                                                required
+                                                placeholder="2"
+                                            />
+                                            <span className="ml-2">人分</span>
+                                        </div>
+                                    </div>
+                                    <div className="grid w-7/12"></div>
+                                </div>
+                                <RecipeActiveInput isActive={isActive} setIsActive={setIsActive} />
+                                <button
+                                    type="submit"
+                                    onClick={handleUpdateRecipe}
+                                    className="block mx-auto py-3 px-10 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
+                                >
+                                    保存する
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                     <AlertMessage // エラーが発生した場合はアラートを表示
                         open={alertMessageOpen}
                         setOpen={setAlertMessageOpen}
                         severity="error"
                         message="保存できませんでした"
                     />
-                </Box>
+                </div>
             ) : (
                 <></>
             )}

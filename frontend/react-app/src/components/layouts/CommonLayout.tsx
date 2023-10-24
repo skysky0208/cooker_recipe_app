@@ -13,13 +13,11 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
             <header>
                 <Header />
             </header>
-            <body>
-                <main className="w-full mx-auto p-6">
-                    <div className="container mx-auto">
-                        <div className="flex justify-center w-full">{children}</div>
-                    </div>
-                </main>
-            </body>
+            <main className="w-full mx-auto">
+                <div className="container mx-auto">
+                    <div className="flex justify-center w-full">{children}</div>
+                </div>
+            </main>
         </>
     );
 };
