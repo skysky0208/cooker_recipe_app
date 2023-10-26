@@ -62,8 +62,14 @@ export interface UpdateRecipeData {
     image?: string;
     servings?: number;
     isActive?: boolean;
+    ingredients?: Ingredient[];
 }
 
 export interface UpdateRecipeFormData extends FormData {
     append(name: keyof UpdateRecipeData, value: String | Blob, fileName?: string): any;
+}
+
+export interface Ingredient {
+    name: string;
+    amount: string;
 }

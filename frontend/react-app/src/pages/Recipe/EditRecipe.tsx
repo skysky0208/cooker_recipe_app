@@ -1,82 +1,93 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
-// import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import AlertMessage from 'components/AlertMessage';
-import { RecipeNameInput, RecipeTimeInput, RecipeActiveInput } from 'features/Recipe/components';
+import { PopUpComponent } from 'components/PopUpComponent';
+import {
+    RecipeTitleInput,
+    RecipeTimeInput,
+    RecipeActiveInput,
+    RecipeCaptionInput,
+    IngredientsInput,
+    RecipeServingsInput,
+} from 'features/Recipe/components';
 
-import { AuthContext } from 'App';
-import { UpdateRecipeFormData, Recipe } from 'interfaces';
+import { UpdateRecipeData, Recipe, Ingredient, UpdateRecipeFormData } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
 import { zenkaku2Hankaku } from 'features/Recipe/function';
+import { getIngredients } from 'lib/api/ingredients';
 
 const EditRecipe = () => {
+    const { register, handleSubmit, setValue, watch } = useForm<UpdateRecipeData>();
+
     const navigate = useNavigate();
-    const { currentUser } = useContext(AuthContext);
     const { id } = useParams<{ id: string | undefined }>();
 
-    const [loading, setLoading] = useState<boolean>(true);
-
     const [recipe, setRecipe] = useState<Recipe>();
-    const [title, setTitle] = useState<string>('');
-    const [pressTime, setPressTime] = useState<number | string>(0);
-    const [preparationTime, setPreparationTime] = useState<number | string>(0);
-    const [image, setImage] = useState<File>();
-    const [caption, setCaption] = useState<string>('');
-    const [servings, setServings] = useState<number | string>('');
-    const [isActive, setIsActive] = useState<boolean>(false);
+    const [image, setImage] = useState<string>('');
     const [preview, setPreview] = useState<string>('');
-    const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
-    const updateFormData = (): UpdateRecipeFormData => {
+    const [loading, setLoading] = useState<boolean>(true);
+    const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+    const [popupFlag, setPopupFlag] = useState<boolean>(false);
+
+    const updateFormData = (data: any): UpdateRecipeFormData => {
         const formData = new FormData();
-        formData.append('title', title);
-        formData.append('caption', caption);
-        formData.append('pressTime', pressTime.toString());
-        formData.append('preparationTime', preparationTime.toString());
-        formData.append('servings', servings.toString());
-        formData.append('isActive', isActive.toString());
+
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+        });
         if (image) formData.append('image', image);
         console.log(formData);
         return formData;
     };
 
-    const handleNumFromChange = (event: any, setValue: React.Dispatch<React.SetStateAction<number | string>>) => {
-        const inputValue = zenkaku2Hankaku(event.target.value);
-        const parsedValue = isNaN(parseFloat(inputValue)) ? '' : parseFloat(inputValue);
-        setValue(parsedValue);
-    };
-
-    // アップロードした画像の情報を取得
-    const uploadImage = useCallback((e: any) => {
-        const file = e.target.files[0];
-        console.log(file);
-        if (file) {
-            setImage(file);
-        }
-    }, []);
-
-    // 画像プレビュー
-    const previewImage = useCallback((e: any) => {
+    const handleImageChange = (e: any) => {
         const file = e.target.files[0];
         if (file) {
             setPreview(window.URL.createObjectURL(file));
+            setImage(file);
+        } else {
+            setImage('');
         }
-    }, []);
+    };
 
     const handleGetRecipe = async () => {
         try {
             const res = await getRecipeForEdit(id);
             console.log(res);
 
-            if (res.status === 200 && res.data.recipe) {
-                setTitle(res.data.recipe.title);
-                setPressTime(res.data.recipe.pressTime);
-                setPreparationTime(res.data.recipe.preparationTime);
-                setCaption(res.data.recipe.caption || '');
-                setServings(res.data.recipe.servings || undefined);
-                setIsActive(res.data.recipe.isActive);
+            if (res.data.status === 200 && res.data.recipe) {
+                setValue('title', res.data.recipe.title);
+                setValue('pressTime', res.data.recipe.pressTime);
+                setValue('preparationTime', res.data.recipe.preparationTime);
+                setValue('caption', res.data.recipe.caption || '');
+                setValue('servings', res.data.recipe.servings || undefined);
+                setValue('isActive', res.data.recipe.isActive);
+                setValue('ingredients', res.data.ingredients);
+                setIngredients(res.data.ingredients);
                 setRecipe(res.data.recipe);
+            } else if (res.data.status === 404) {
+                console.log('No recipe');
+                console.log(res);
+                navigate('/not_found');
+            } else {
+                navigate('/');
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+        setLoading(false);
+    };
+
+    const handleGetIngredients = async () => {
+        try {
+            const res = await getIngredients(id);
+            if (res.data.status === 200 && res.data.ingredients) {
+                setIngredients(res.data.ingredients);
             } else {
                 console.log('No recipe');
             }
@@ -87,17 +98,14 @@ const EditRecipe = () => {
         setLoading(false);
     };
 
-    const handleUpdateRecipe = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-
-        const data = updateFormData();
-
+    const handleUpdateRecipe = async (data: UpdateRecipeData) => {
         try {
-            console.log(data);
-            const res = await updateRecipe(id, data);
+            const formdata = updateFormData(data);
+            console.log(formdata);
+            const res = await updateRecipe(id, formdata);
             console.log(res);
 
-            if (res.status === 200) {
+            if (res.data.status === 200) {
                 navigate(`/recipes/new`);
             } else {
                 setAlertMessageOpen(true);
@@ -112,14 +120,18 @@ const EditRecipe = () => {
         handleGetRecipe();
     }, []);
 
+    useEffect(() => {
+        handleGetIngredients();
+    }, [popupFlag]);
+
     return (
         <>
             {!loading ? (
-                <div className="w-full md:w-3/4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="w-full mx-3 lg:w-3/4 bg-white border border-gray-200 rounded-xl shadow-sm">
                     <form>
                         <div className="p-4 sm:p-7 flex justify-center ">
                             <div className="grid gap-y-4 w-full">
-                                <RecipeNameInput title={title} setTitle={setTitle} />
+                                <RecipeTitleInput register={register} />
                                 <div>
                                     <label
                                         htmlFor="file-button"
@@ -134,7 +146,7 @@ const EditRecipe = () => {
                                         ) : (
                                             <img
                                                 src={recipe?.image.url}
-                                                alt="preview img"
+                                                alt="current img"
                                                 className="object-cover w-full h-full"
                                             />
                                         )}
@@ -143,72 +155,58 @@ const EditRecipe = () => {
                                             id="file-button"
                                             type="file"
                                             className="hidden"
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                previewImage(e);
-                                                uploadImage(e);
-                                            }}
+                                            onChange={handleImageChange}
                                         />
                                     </label>
                                 </div>
 
-                                <RecipeTimeInput
-                                    preparationTime={preparationTime}
-                                    pressTime={pressTime}
-                                    setPreparationTime={setPreparationTime}
-                                    setPressTime={setPressTime}
-                                />
-                                <div>
-                                    <label
-                                        htmlFor="caption"
-                                        className="block p-1 m-2 w-28 text-center bg-orange-200 rounded-md"
-                                    >
-                                        説明文
-                                    </label>
-                                    <textarea
-                                        value={caption}
-                                        onChange={(event) => setCaption(event.target.value)}
-                                        id="caption"
-                                        rows={4}
-                                        className="block p-2.5 w-4/5 mx-auto  text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
-                                        placeholder="レシピの説明文をここに記入してください"
-                                    ></textarea>
-                                </div>
+                                <RecipeTimeInput register={register} setValue={setValue} />
+                                <RecipeCaptionInput register={register} />
 
-                                <div className="flex">
-                                    <div className="flex justify-between w-5/12">
-                                        <label
-                                            htmlFor="servings"
-                                            className="p-1 m-2 w-20 text-center bg-orange-200 rounded-md"
-                                        >
-                                            材料
-                                        </label>
-                                        <div className="inline m-1">
-                                            <input
-                                                type="string"
-                                                value={servings}
-                                                onChange={(event) => handleNumFromChange(event, setServings)}
-                                                id="servings"
-                                                name="servings"
-                                                className="p-2 ml-2 w-12 border border-gray-200 bg-gray-50 rounded-md text-sm"
-                                                required
-                                                placeholder="2"
-                                            />
-                                            <span className="ml-2">人分</span>
+                                <div className="md:flex">
+                                    <div className="md:w-4/12">
+                                        <RecipeServingsInput register={register} setValue={setValue} />
+                                        <div className="mx-10 py-2">
+                                            <table className="w-full">
+                                                <tbody>
+                                                    {ingredients.map((ingredient, index) => {
+                                                        return (
+                                                            <tr className="px-3">
+                                                                <td>{ingredient.name}</td>
+                                                                <td className="text-right">{ingredient.amount}</td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
                                         </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setPopupFlag(true)}
+                                            className="block mx-auto my-1 py-1 px-5 border-2 border-orange-400 rounded-md"
+                                        >
+                                            材料を編集
+                                        </button>
                                     </div>
-                                    <div className="grid w-7/12"></div>
+                                    <div className="grid md:w-8/12"></div>
                                 </div>
-                                <RecipeActiveInput isActive={isActive} setIsActive={setIsActive} />
+                                <RecipeActiveInput setValue={setValue} defaultValue={watch('isActive')} />
                                 <button
                                     type="submit"
-                                    onClick={handleUpdateRecipe}
-                                    className="block mx-auto py-3 px-10 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
+                                    onClick={handleSubmit(handleUpdateRecipe)}
+                                    className="block mx-auto py-3 px-8 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
                                 >
                                     保存する
                                 </button>
                             </div>
                         </div>
                     </form>
+
+                    <PopUpComponent
+                        viewFlag={popupFlag}
+                        setViewFlag={setPopupFlag}
+                        children={<IngredientsInput viewFlag={popupFlag} setViewFlag={setPopupFlag} />}
+                    />
                     <AlertMessage // エラーが発生した場合はアラートを表示
                         open={alertMessageOpen}
                         setOpen={setAlertMessageOpen}

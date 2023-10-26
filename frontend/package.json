@@ -10,15 +10,16 @@
         "axios": "^1.5.1",
         "axios-case-converter": "^1.1.0",
         "js-cookie": "^3.0.5",
+        "react-hook-form": "^7.47.0",
         "react-router-dom": "^6.16.0"
     },
     "devDependencies": {
         "@types/axios": "^0.14.0",
         "@types/js-cookie": "^3.0.4",
         "@types/react-router-dom": "^5.3.3",
-        "prettier": "3.0.3",
         "autoprefixer": "^10.4.16",
         "postcss": "^8.4.31",
+        "prettier": "3.0.3",
         "tailwindcss": "^3.3.3"
     }
 }
