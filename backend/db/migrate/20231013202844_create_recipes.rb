@@ -8,7 +8,7 @@ class CreateRecipes < ActiveRecord::Migration[6.1]
       t.integer :preparation_time, null: false
       t.integer :servings
       t.boolean :is_active, default: false
-      t.string :image
+      t.string :image, null: false
 
       t.timestamps
     end

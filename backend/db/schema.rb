@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_13_202844) do
+ActiveRecord::Schema.define(version: 2023_10_21_004643) do
+
+  create_table "ingredients", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "recipe_id", null: false
+    t.string "name", null: false
+    t.string "amount", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "recipes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -20,7 +28,7 @@ ActiveRecord::Schema.define(version: 2023_10_13_202844) do
     t.integer "preparation_time", null: false
     t.integer "servings"
     t.boolean "is_active", default: false
-    t.string "image"
+    t.string "image", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

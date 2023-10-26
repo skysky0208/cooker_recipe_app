@@ -14,19 +14,16 @@ class Api::V1::RecipesController < ApplicationController
     end
 
     def edit
-        render json: { status: 200, recipe: @recipe}
+        render json: { status: 200, recipe: @recipe, ingredients: @recipe.ingredients}
     end
 
     def update
-        @recipe.title = recipe_params[:title]
-        @recipe.caption = recipe_params[:caption]
-        @recipe.image = recipe_params[:image] if recipe_params[:image] != nil
-        @recipe.press_time = recipe_params[:press_time]
-        @recipe.preparation_time = recipe_params[:preparation_time]
-        @recipe.servings = recipe_params[:servings]
-        @recipe.is_active = recipe_params[:is_active]
+        # @recipe.update_ingredient(params[:ingredients])
+        if recipe_params[:image].present?
+            @recipe.image = recipe_params[:image]
+        end
 
-        if @recipe.save
+        if @recipe.update(recipe_params.except(:image))
             render json: {status: 200, id: @recipe.id}
         else
             render json: { status: 500, message: "更新に失敗しました"}
@@ -35,11 +32,14 @@ class Api::V1::RecipesController < ApplicationController
 
     private
         def set_recipe
-            @recipe = Recipe.find(params[:id])
+            @recipe = Recipe.find_by(id: params[:id])
+            if !@recipe
+                render json: { error: 'レシピが見つかりません', status: 404 }
+            end
         end
 
         def recipe_params
-            params.permit(:title, :press_time, :preparation_time, :image, :servings, :is_active, :caption)
+            params.permit(:title, :press_time, :preparation_time, :servings, :is_active, :caption,:image)
         end
 
 end
