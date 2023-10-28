@@ -14,7 +14,7 @@ class Api::V1::RecipesController < ApplicationController
     end
 
     def edit
-        render json: { status: 200, recipe: @recipe, ingredients: @recipe.ingredients}
+        render json: { status: 200, recipe: @recipe, ingredients: @recipe.ingredients, steps: @recipe.steps}
     end
 
     def update

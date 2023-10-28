@@ -23,7 +23,7 @@ class Api::V1::IngredientsController < ApplicationController
             end
         end
         
-        render json: {status: 200}
+        render json: {status: 200, ingredients: @recipe.ingredients}
     end
 
     private

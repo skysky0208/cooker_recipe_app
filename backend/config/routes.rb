@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :test, only: %i[index]
       resources :recipes, only: [:create, :edit, :update] do
         resource :ingredients, only: [:show, :update]
+        resource :steps, only: [:show, :update]
       end
     end
   end
