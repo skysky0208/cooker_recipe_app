@@ -73,3 +73,8 @@ export interface Ingredient {
     name: string;
     amount: string;
 }
+
+export interface Step {
+    order: number;
+    description: string;
+}

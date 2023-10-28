@@ -6,3 +6,6 @@ export { default as RecipeServingsInput } from './RecipeServingsInput'
 
 export { default as IngredientsInput } from './IngredientsInput'
 
+export { default as StepsInput } from './StepsInput'
+
+

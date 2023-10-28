@@ -11,11 +11,12 @@ import {
     RecipeCaptionInput,
     IngredientsInput,
     RecipeServingsInput,
+    StepsInput,
 } from 'features/Recipe/components';
 
-import { UpdateRecipeData, Recipe, Ingredient, UpdateRecipeFormData } from 'interfaces';
+import { UpdateRecipeData, Recipe, Ingredient, UpdateRecipeFormData, Step } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
-import { zenkaku2Hankaku } from 'features/Recipe/function';
+import { getSteps } from 'lib/api/steps';
 import { getIngredients } from 'lib/api/ingredients';
 
 const EditRecipe = () => {
@@ -28,10 +29,12 @@ const EditRecipe = () => {
     const [image, setImage] = useState<string>('');
     const [preview, setPreview] = useState<string>('');
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [steps, setSteps] = useState<Step[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
-    const [popupFlag, setPopupFlag] = useState<boolean>(false);
+    const [ingredientPopupFlag, setingredientPopupFlag] = useState<boolean>(false);
+    const [stepPopupFlag, setStepPopupFlag] = useState<boolean>(false);
 
     const updateFormData = (data: any): UpdateRecipeFormData => {
         const formData = new FormData();
@@ -68,6 +71,7 @@ const EditRecipe = () => {
                 setValue('isActive', res.data.recipe.isActive);
                 setValue('ingredients', res.data.ingredients);
                 setIngredients(res.data.ingredients);
+                setSteps(res.data.steps);
                 setRecipe(res.data.recipe);
             } else if (res.data.status === 404) {
                 console.log('No recipe');
@@ -75,21 +79,6 @@ const EditRecipe = () => {
                 navigate('/not_found');
             } else {
                 navigate('/');
-            }
-        } catch (err) {
-            console.log(err);
-        }
-
-        setLoading(false);
-    };
-
-    const handleGetIngredients = async () => {
-        try {
-            const res = await getIngredients(id);
-            if (res.data.status === 200 && res.data.ingredients) {
-                setIngredients(res.data.ingredients);
-            } else {
-                console.log('No recipe');
             }
         } catch (err) {
             console.log(err);
@@ -120,14 +109,10 @@ const EditRecipe = () => {
         handleGetRecipe();
     }, []);
 
-    useEffect(() => {
-        handleGetIngredients();
-    }, [popupFlag]);
-
     return (
         <>
             {!loading ? (
-                <div className="w-full mx-3 lg:w-3/4 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="w-full mx-3 lg:w-2/3 bg-white border border-gray-200 rounded-xl shadow-sm">
                     <form>
                         <div className="p-4 sm:p-7 flex justify-center ">
                             <div className="grid gap-y-4 w-full">
@@ -163,8 +148,8 @@ const EditRecipe = () => {
                                 <RecipeTimeInput register={register} setValue={setValue} />
                                 <RecipeCaptionInput register={register} />
 
-                                <div className="md:flex">
-                                    <div className="md:w-4/12">
+                                <div className="grid gap-4 md:flex">
+                                    <div className="md:w-5/12">
                                         <RecipeServingsInput register={register} setValue={setValue} />
                                         <div className="mx-10 py-2">
                                             <table className="w-full">
@@ -182,13 +167,35 @@ const EditRecipe = () => {
                                         </div>
                                         <button
                                             type="button"
-                                            onClick={() => setPopupFlag(true)}
+                                            onClick={() => setingredientPopupFlag(true)}
                                             className="block mx-auto my-1 py-1 px-5 border-2 border-orange-400 rounded-md"
                                         >
                                             材料を編集
                                         </button>
                                     </div>
-                                    <div className="grid md:w-8/12"></div>
+                                    <div className="md:w-7/12">
+                                        <p className="p-1 m-2 w-20 text-center bg-orange-200 rounded-md">作り方</p>
+                                        <div className="mx-8 py-2">
+                                            {steps.map((step, index) => {
+                                                return (
+                                                    <div className="flex mb-2">
+                                                        <div className=" w-7 h-7 bg-orange-950 text-yellow-100 rounded-md text-center ">
+                                                            {step.order}
+                                                        </div>
+                                                        <p className="pl-3 w-full">{step.description}</p>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setStepPopupFlag(true)}
+                                            className="block mx-auto my-1 py-1 px-5 border-2 border-orange-400 rounded-md"
+                                        >
+                                            作り方を編集
+                                        </button>
+                                    </div>
                                 </div>
                                 <RecipeActiveInput setValue={setValue} defaultValue={watch('isActive')} />
                                 <button
@@ -203,9 +210,28 @@ const EditRecipe = () => {
                     </form>
 
                     <PopUpComponent
-                        viewFlag={popupFlag}
-                        setViewFlag={setPopupFlag}
-                        children={<IngredientsInput viewFlag={popupFlag} setViewFlag={setPopupFlag} />}
+                        viewFlag={ingredientPopupFlag}
+                        setViewFlag={setingredientPopupFlag}
+                        children={
+                            <IngredientsInput
+                                viewFlag={ingredientPopupFlag}
+                                setViewFlag={setingredientPopupFlag}
+                                ingredients={ingredients}
+                                setIngredients={setIngredients}
+                            />
+                        }
+                    />
+                    <PopUpComponent
+                        viewFlag={stepPopupFlag}
+                        setViewFlag={setStepPopupFlag}
+                        children={
+                            <StepsInput
+                                viewFlag={stepPopupFlag}
+                                setViewFlag={setStepPopupFlag}
+                                steps={steps}
+                                setSteps={setSteps}
+                            />
+                        }
                     />
                     <AlertMessage // エラーが発生した場合はアラートを表示
                         open={alertMessageOpen}

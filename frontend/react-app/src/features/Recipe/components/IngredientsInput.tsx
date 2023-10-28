@@ -1,19 +1,21 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import AlertMessage from 'components/AlertMessage';
 
 import { Ingredient } from 'interfaces';
-import { getIngredients, updateIngredients } from 'lib/api/ingredients';
+import { updateIngredients } from 'lib/api/ingredients';
 
-interface RecipeActiveInputProps {
+interface IngredientsInputProps {
     viewFlag: boolean;
     setViewFlag: React.Dispatch<React.SetStateAction<boolean>>;
+    ingredients: Ingredient[];
+    setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
 }
 
-const IngredientsInput: React.FC<RecipeActiveInputProps> = ({ viewFlag, setViewFlag }) => {
+const IngredientsInput: React.FC<IngredientsInputProps> = ({ viewFlag, setViewFlag, ingredients, setIngredients }) => {
     const { id } = useParams<{ id: string | undefined }>();
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
@@ -26,21 +28,6 @@ const IngredientsInput: React.FC<RecipeActiveInputProps> = ({ viewFlag, setViewF
         name: 'ingredients',
     });
 
-    const handleGetIngredients = async () => {
-        try {
-            const res = await getIngredients(id);
-            if (res.data.status === 200 && res.data.ingredients) {
-                setValue('ingredients', res.data.ingredients);
-            } else {
-                console.log('No recipe');
-            }
-        } catch (err) {
-            console.log(err);
-        }
-
-        setLoading(false);
-    };
-
     const handleUpdateIngredient = async (data: any) => {
         try {
             console.log(data);
@@ -49,6 +36,7 @@ const IngredientsInput: React.FC<RecipeActiveInputProps> = ({ viewFlag, setViewF
 
             if (res.data.status === 200) {
                 reset();
+                setIngredients(res.data.ingredients);
                 setViewFlag(false);
             } else {
                 console.log('保存できませんでした');
@@ -61,7 +49,8 @@ const IngredientsInput: React.FC<RecipeActiveInputProps> = ({ viewFlag, setViewF
     };
 
     useEffect(() => {
-        handleGetIngredients();
+        setValue('ingredients', ingredients);
+        setLoading(false);
     }, [viewFlag]);
 
     // input をいくつ追加したカウント
@@ -78,15 +67,15 @@ const IngredientsInput: React.FC<RecipeActiveInputProps> = ({ viewFlag, setViewF
                                 <label htmlFor={`ingredients.${index}.name`} />
                                 <input
                                     {...register(`ingredients.${index}.name`)}
-                                    id={`tasks.${index}.name`}
+                                    id={`ingredients.${index}.name`}
                                     className="p-2 ml-2 w-5/6 border border-gray-300 bg-gray-50 rounded-md text-sm"
                                     placeholder="具材・調味料"
                                 />
 
-                                <label htmlFor={`tasks.${index}.amount`} />
+                                <label htmlFor={`ingredients.${index}.amount`} />
                                 <input
                                     {...register(`ingredients.${index}.amount`)}
-                                    id={`tasks.${index}.amount`}
+                                    id={`ingredients.${index}.amount`}
                                     className="p-2 ml-2 w-5/6 border border-gray-300 bg-gray-50 rounded-md text-sm"
                                     placeholder="分量"
                                 />
