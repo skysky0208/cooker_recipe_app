@@ -7,13 +7,16 @@ class Api::V1::StepsController < ApplicationController
     end
 
     def update
-        new_steps = params[:steps]
+        if current_api_v1_user != @recipe.user_id
+            render json: { message: "アクセス権限があるユーザではありません" , status: 403}
+        else
+            new_steps = params[:steps]
 
         new_steps.each do |item|
             step = @recipe.steps.find_or_initialize_by(order: item['order'])
             step.description = item['description']
             if not step.save
-                render json: { message: "保存できませんでした" , status: :internal_server_error}
+                render json: { message: "保存できませんでした" , status: 500}
             end
         end
         
@@ -26,6 +29,7 @@ class Api::V1::StepsController < ApplicationController
         end
         
         render json: {status: 200, steps: @recipe.steps}
+        end
     end
 
     private
