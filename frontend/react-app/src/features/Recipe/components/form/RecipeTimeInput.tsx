@@ -1,5 +1,5 @@
 import React from 'react';
-import { zenkaku2Hankaku } from '../function';
+import { zenkaku2Hankaku } from 'features/Recipe/function';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { UpdateRecipeData } from 'interfaces';
 

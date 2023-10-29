@@ -16,8 +16,6 @@ import {
 
 import { UpdateRecipeData, Recipe, Ingredient, UpdateRecipeFormData, Step } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
-import { getSteps } from 'lib/api/steps';
-import { getIngredients } from 'lib/api/ingredients';
 
 const EditRecipe = () => {
     const { register, handleSubmit, setValue, watch } = useForm<UpdateRecipeData>();
@@ -120,7 +118,7 @@ const EditRecipe = () => {
                                 <div>
                                     <label
                                         htmlFor="file-button"
-                                        className="cursor-pointer block mx-auto w-72 h-48 border border-gray-300 relative"
+                                        className="md:w-1/2 cursor-pointer block mx-auto border border-gray-300 relative"
                                     >
                                         {preview ? (
                                             <img

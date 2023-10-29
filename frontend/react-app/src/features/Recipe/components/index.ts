@@ -1,11 +1,11 @@
-export { default as RecipeTitleInput } from './RecipeTitleInput'
-export { default as RecipeTimeInput } from './RecipeTimeInput'
-export { default as RecipeActiveInput } from './RecipeActiveInput'
-export { default as RecipeCaptionInput } from './RecipeCaptionInput'
-export { default as RecipeServingsInput } from './RecipeServingsInput'
+export { default as RecipeTitleInput } from './form/RecipeTitleInput'
+export { default as RecipeTimeInput } from './form//RecipeTimeInput'
+export { default as RecipeActiveInput } from './form//RecipeActiveInput'
+export { default as RecipeCaptionInput } from './form//RecipeCaptionInput'
+export { default as RecipeServingsInput } from './form//RecipeServingsInput'
 
-export { default as IngredientsInput } from './IngredientsInput'
+export { default as IngredientsInput } from './form/IngredientsInput'
 
-export { default as StepsInput } from './StepsInput'
+export { default as StepsInput } from './form//StepsInput'
 
 

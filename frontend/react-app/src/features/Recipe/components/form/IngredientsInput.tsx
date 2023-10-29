@@ -19,10 +19,9 @@ const IngredientsInput: React.FC<IngredientsInputProps> = ({ viewFlag, setViewFl
     const { id } = useParams<{ id: string | undefined }>();
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
-    // const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const { register, handleSubmit, setValue, control, watch, reset } = useForm();
+    const { register, handleSubmit, setValue, control, reset } = useForm();
     const { fields, append, remove } = useFieldArray({
         control,
         name: 'ingredients',

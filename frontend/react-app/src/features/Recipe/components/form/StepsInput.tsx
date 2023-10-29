@@ -1,12 +1,12 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import AlertMessage from 'components/AlertMessage';
 
 import { Step } from 'interfaces';
-import { getSteps, updateSteps } from 'lib/api/steps';
+import { updateSteps } from 'lib/api/steps';
 
 interface StepsInputProps {
     viewFlag: boolean;
