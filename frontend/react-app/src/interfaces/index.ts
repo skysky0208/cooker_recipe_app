@@ -28,8 +28,8 @@ export interface User {
 }
 
 export interface Recipe {
-    id: number | null;
-    userId: number;
+    id: number | undefined;
+    userId?: number;
     title: string;
     caption: string;
     pressTime: number;

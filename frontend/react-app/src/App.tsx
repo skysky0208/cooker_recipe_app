@@ -9,6 +9,7 @@ import EmailSend from 'pages/Auth/EmailSend';
 import AuthSuccess from 'pages/Auth/AuthSuccess';
 import CreateRecipe from 'pages/Recipe/CreateRecipe';
 import EditRecipe from 'pages/Recipe/EditRecipe';
+import ShowRecipe from 'pages/Recipe/ShowRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
 
@@ -90,6 +91,7 @@ const App = () => {
                                 </Private>
                             }
                         />
+                        <Route path="/recipes/:id" element={<ShowRecipe />} />
                         <Route
                             path="/recipes/new"
                             element={

@@ -1,4 +1,4 @@
-import { Recipe, CreateRecipeFormData, UpdateRecipeFormData } from 'interfaces';
+import { CreateRecipeFormData, UpdateRecipeFormData } from 'interfaces';
 import client from './client';
 import Cookies from 'js-cookie';
 
@@ -10,6 +10,10 @@ export const createRecipe = (data: CreateRecipeFormData) => {
     };
 
     return client.post('recipes', data, { headers: headers });
+};
+
+export const getRecipe = (id: string | undefined) => {
+    return client.get(`recipes/${id}`);
 };
 
 export const getRecipeForEdit = (id: string | undefined) => {

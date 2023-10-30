@@ -110,7 +110,7 @@ const EditRecipe = () => {
     return (
         <>
             {!loading ? (
-                <div className="w-full mx-3 lg:w-2/3 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="w-full md:mx-3 lg:w-2/3 bg-white border border-gray-200 lg:rounded-xl shadow-sm">
                     <form>
                         <div className="p-4 sm:p-7 flex justify-center ">
                             <div className="grid gap-y-4 w-full">

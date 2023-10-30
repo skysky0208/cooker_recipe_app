@@ -14,7 +14,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 <Header />
             </header>
             <main className="w-full mx-auto">
-                <div className="mx-auto">
+                <div className="mx-auto bg-orange-50">
                     <div className="flex justify-center w-full">{children}</div>
                 </div>
             </main>

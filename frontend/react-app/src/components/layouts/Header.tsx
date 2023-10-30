@@ -7,9 +7,9 @@ const Header = () => {
     return (
         <>
             <header className="text-neutral-600 body-font">
-                <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
+                <div className="container mx-auto flex flex-wrap px-1 py-3 flex-col md:flex-row items-center">
                     <a href="/" className="flex items-center mb-3 md:mb-0">
-                        <img src={`${process.env.PUBLIC_URL}/logo_header.png`} alt="logo" className="w-50" />
+                        <img src={`${process.env.PUBLIC_URL}/logo_header.png`} alt="logo" className="w-60" />
                     </a>
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
                         <a className="text-sm md:text-base font-bold hover:text-neutral-600  mr-3 md:mr-5">
