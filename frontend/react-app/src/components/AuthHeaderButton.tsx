@@ -6,7 +6,7 @@ import { signOut } from 'lib/api/auth';
 
 import { AuthContext } from 'App';
 
-const HeaderAuthButton = () => {
+const AuthHeaderButton = () => {
     const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -82,4 +82,4 @@ const HeaderAuthButton = () => {
     }
 };
 
-export default HeaderAuthButton;
+export default AuthHeaderButton;
