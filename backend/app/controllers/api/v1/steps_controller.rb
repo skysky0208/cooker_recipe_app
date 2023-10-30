@@ -7,7 +7,7 @@ class Api::V1::StepsController < ApplicationController
     end
 
     def update
-        if current_api_v1_user != @recipe.user_id
+        if current_api_v1_user != @recipe.user
             render json: { message: "アクセス権限があるユーザではありません" , status: 403}
         else
             new_steps = params[:steps]

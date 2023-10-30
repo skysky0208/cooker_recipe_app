@@ -8,18 +8,24 @@ class Api::V1::IngredientsController < ApplicationController
 
     def update
         new_ingredients = params[:ingredients]
+        new_ingredient_ids = new_ingredients.map { |item| item['id'] }.compact
 
-        @recipe.ingredients.each do |ingredient|
-            unless new_ingredients.any?{|new_ingredient| new_ingredient['name'] == ingredient.name}
-                ingredient.destroy
-            end
-        end
+        @recipe.ingredients.where.not(id: new_ingredient_ids).destroy_all
 
         new_ingredients.each do |item|
-            ingredient = @recipe.ingredients.find_or_initialize_by(name: item['name'])
-            ingredient.amount = item['amount']
-            if not ingredient.save
-                render json: { message: "保存できませんでした" , status: :internal_server_error}
+            if item['id'].blank?
+                ingredient = Ingredient.new(name: item['name'], amount: item['amount'])
+                ingredient.recipe_id = @recipe.id
+                if not ingredient.save
+                    render json: { message: "保存できませんでした" , status: :internal_server_error}
+                    return
+                end
+            else
+                ingredient = Ingredient.find(item['id'])
+                if not ingredient.update(name: item['name'], amount: item['amount'])
+                    render json: { message: "保存できませんでした" , status: :internal_server_error}
+                    return
+                end
             end
         end
         
