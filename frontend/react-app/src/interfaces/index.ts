@@ -78,3 +78,17 @@ export interface Step {
     order: number;
     description: string;
 }
+
+export interface RecipeInfo {
+    title: string;
+    caption: string;
+    pressTime: number;
+    preparationTime: number;
+    image: {
+        url: string;
+    };
+    servings: number;
+    ingredients: Ingredient[];
+    steps: Step[];
+    user?: User;
+}

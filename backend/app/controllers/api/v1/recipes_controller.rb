@@ -17,7 +17,14 @@ class Api::V1::RecipesController < ApplicationController
         if @recipe.is_active != true
             render json: { error: 'レシピが見つかりません', status: 404 }
         else
-            render json: { status: 200, recipe: @recipe, ingredients: @recipe.ingredients, steps: @recipe.steps, user: @recipe.user}
+            render json: { 
+                status: 200, 
+                recipe: @recipe.as_json(include: {
+                    ingredients: {},
+                    steps: {},
+                    user: { only: [:image, :nickname] }
+                })
+            }
         end
     end
 

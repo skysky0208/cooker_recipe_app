@@ -6,6 +6,11 @@ export { default as RecipeServingsInput } from './form//RecipeServingsInput'
 
 export { default as IngredientsInput } from './form/IngredientsInput'
 
-export { default as StepsInput } from './form//StepsInput'
+export { default as StepsInput } from './form/StepsInput'
+
+export { default as RecipeTimeOutput } from './drowing/RecipeTimeOutput'
+export { default as IngredientsList } from './drowing/IngredientsList'
+export { default as StepsList } from './drowing/StepsList'
+export { default as AuthorOutput } from './drowing/AuthorOutput'
 
 
