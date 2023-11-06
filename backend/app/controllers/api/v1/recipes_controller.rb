@@ -13,6 +13,19 @@ class Api::V1::RecipesController < ApplicationController
         end
     end
 
+    def index
+        recipes = Recipe.where(is_active: true).as_json(
+            only: [:id, :title, :preparation_time, :press_time, :image],
+            include: {
+                ingredients: {
+                    only: [:name]
+                }
+            }
+        )
+
+        render json: { status: 200, recipes: recipes }
+    end
+
     def show
         if @recipe.is_active != true
             render json: { error: 'レシピが見つかりません', status: 404 }
