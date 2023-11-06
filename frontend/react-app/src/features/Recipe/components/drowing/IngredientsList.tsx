@@ -1,12 +1,12 @@
 import { Ingredient } from 'interfaces';
 import React from 'react';
 
-interface IngredientsListProps {
+interface Props {
     servings: number;
     ingredients: Ingredient[];
 }
 
-const IngredientsList: React.FC<IngredientsListProps> = ({ servings, ingredients }) => {
+const IngredientsList: React.FC<Props> = ({ servings, ingredients }) => {
     return (
         <div className="ingredients mb-5">
             <div className="ingredient-title flex items-center">

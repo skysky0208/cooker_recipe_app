@@ -16,6 +16,10 @@ export const getRecipe = (id: string | undefined) => {
     return client.get(`recipes/${id}`);
 };
 
+export const getRecipes = () => {
+    return client.get('recipes');
+}
+
 export const getRecipeForEdit = (id: string | undefined) => {
     const headers = {
         'access-token': Cookies.get('_access_token'),

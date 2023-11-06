@@ -71,7 +71,7 @@ export interface UpdateRecipeFormData extends FormData {
 
 export interface Ingredient {
     name: string;
-    amount: string;
+    amount?: string;
 }
 
 export interface Step {
@@ -79,7 +79,7 @@ export interface Step {
     description: string;
 }
 
-export interface RecipeInfo {
+export interface RecipeDataForShow {
     title: string;
     caption: string;
     pressTime: number;
@@ -91,4 +91,15 @@ export interface RecipeInfo {
     ingredients: Ingredient[];
     steps: Step[];
     user?: User;
+}
+
+export interface RecipeDataForIndex {
+    id: number;
+    title: string;
+    pressTime: number;
+    preparationTime: number;
+    image: {
+        url: string;
+    };
+    ingredients: Ingredient[];
 }

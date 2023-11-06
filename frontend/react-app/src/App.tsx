@@ -10,6 +10,7 @@ import AuthSuccess from 'pages/Auth/AuthSuccess';
 import CreateRecipe from 'pages/Recipe/CreateRecipe';
 import EditRecipe from 'pages/Recipe/EditRecipe';
 import ShowRecipe from 'pages/Recipe/ShowRecipe';
+import IndexRecipe from 'pages/Recipe/IndexRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
 
@@ -91,6 +92,7 @@ const App = () => {
                                 </Private>
                             }
                         />
+                        <Route path="/recipes" element={<IndexRecipe />} />
                         <Route path="/recipes/:id" element={<ShowRecipe />} />
                         <Route
                             path="/recipes/new"

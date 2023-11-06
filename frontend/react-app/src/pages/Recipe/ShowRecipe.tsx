@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { RecipeInfo } from 'interfaces';
+import { RecipeDataForShow } from 'interfaces';
 import { getRecipe } from 'lib/api/recipes';
 import { AuthorOutput, IngredientsList, RecipeTimeOutput, StepsList } from 'features/Recipe/components';
 
@@ -10,7 +10,7 @@ const ShowRecipe = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState<boolean>(true);
-    const [recipe, setRecipe] = useState<RecipeInfo>({
+    const [recipe, setRecipe] = useState<RecipeDataForShow>({
         title: '',
         caption: '',
         pressTime: 0,
@@ -30,10 +30,6 @@ const ShowRecipe = () => {
 
             if (res.data.status === 200 && res.data.recipe) {
                 setRecipe(res.data.recipe);
-            } else if (res.data.status === 404) {
-                console.log('No recipe');
-                console.log(res);
-                navigate('/not_found');
             } else {
                 navigate('/');
             }

@@ -1,11 +1,11 @@
 import { Step } from 'interfaces';
 import React from 'react';
 
-interface StepsListProps {
+interface Props {
     steps: Step[];
 }
 
-const StepsList: React.FC<StepsListProps> = ({ steps }) => {
+const StepsList: React.FC<Props> = ({ steps }) => {
     return (
         <div className="staps mb-5">
             <p className="p-1 m-2 w-20 text-center bg-orange-200 rounded-md steps-title">作り方</p>

@@ -1,10 +1,10 @@
 import React from 'react';
 
-interface AuthorOutputProps {
+interface Props {
     nickname: string | undefined;
 }
 
-const AuthorOutput: React.FC<AuthorOutputProps> = ({ nickname }) => {
+const AuthorOutput: React.FC<Props> = ({ nickname }) => {
     return (
         <div className="flex m-5 p-2 items-center border-2 rounded-md">
             <div className="relative w-8 h-8 overflow-hidden bg-gray-300 rounded-full">
