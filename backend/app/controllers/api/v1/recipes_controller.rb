@@ -1,4 +1,5 @@
 class Api::V1::RecipesController < ApplicationController
+    include Pagination
     before_action :authenticate_api_v1_user!, only: [:create, :edit, :update]
     before_action :set_recipe, only: [:edit, :show, :update]
 
@@ -14,7 +15,10 @@ class Api::V1::RecipesController < ApplicationController
     end
 
     def index
-        recipes = Recipe.where(is_active: true).as_json(
+        recipes = Recipe.where(is_active: true).includes(:ingredients).page(params[:page]).per(10)
+        pagination = resources_with_pagination(recipes)
+        
+        recipes_json = recipes.as_json(
             only: [:id, :title, :preparation_time, :press_time, :image],
             include: {
                 ingredients: {
@@ -23,7 +27,7 @@ class Api::V1::RecipesController < ApplicationController
             }
         )
 
-        render json: { status: 200, recipes: recipes }
+        render json: { status: 200, recipes: recipes_json, pagination: pagination }
     end
 
     def show

@@ -49,3 +49,6 @@ gem 'rack-cors'
 
 # 画像登録
 gem 'carrierwave'
+
+# ページネーション
+gem 'kaminari'
