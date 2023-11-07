@@ -103,3 +103,9 @@ export interface RecipeDataForIndex {
     };
     ingredients: Ingredient[];
 }
+
+export interface Pagination {
+    current: number;
+    limit_value: number;
+    pages: number;
+}

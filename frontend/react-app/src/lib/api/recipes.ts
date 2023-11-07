@@ -16,9 +16,14 @@ export const getRecipe = (id: string | undefined) => {
     return client.get(`recipes/${id}`);
 };
 
-export const getRecipes = () => {
-    return client.get('recipes');
-}
+export const getRecipes = (page: string | null) => {
+    return client.get('recipes', {
+        params: {
+            // ここにクエリパラメータを指定する
+            page: page,
+        },
+    });
+};
 
 export const getRecipeForEdit = (id: string | undefined) => {
     const headers = {
