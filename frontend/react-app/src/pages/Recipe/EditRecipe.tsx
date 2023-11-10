@@ -9,10 +9,11 @@ import {
     RecipeActiveInput,
     RecipeCaptionInput,
     IngredientsInput,
-    RecipeServingsInput,
     StepsInput,
     SubmitButton,
     ImageInput,
+    StepsPreview,
+    IngredientsPreview,
 } from 'components/recipe';
 
 import { RecipeData, Recipe, Ingredient, RecipeFormData, Step } from 'interfaces';
@@ -31,7 +32,7 @@ const EditRecipe = () => {
 
     const [loading, setLoading] = useState<boolean>(true);
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
-    const [ingredientPopupFlag, setingredientPopupFlag] = useState<boolean>(false);
+    const [ingredientPopupFlag, setIngredientPopupFlag] = useState<boolean>(false);
     const [stepPopupFlag, setStepPopupFlag] = useState<boolean>(false);
 
     const updateFormData = (data: any): RecipeFormData => {
@@ -111,51 +112,13 @@ const EditRecipe = () => {
 
                                 <div className="grid gap-4 md:flex">
                                     <div className="md:w-5/12">
-                                        <RecipeServingsInput register={register} setValue={setValue} />
-                                        <div className="mx-10 py-2">
-                                            <table className="w-full">
-                                                <tbody>
-                                                    {ingredients.map((ingredient, index) => {
-                                                        return (
-                                                            <tr className="px-3">
-                                                                <td>{ingredient.name}</td>
-                                                                <td className="text-right">{ingredient.amount}</td>
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <button
-                                            type="button"
-                                            onClick={() => setingredientPopupFlag(true)}
-                                            className="block mx-auto my-1 py-1 px-5 border-2 border-orange-400 rounded-md"
-                                        >
-                                            材料を編集
-                                        </button>
+                                        <IngredientsPreview
+                                            ingredients={ingredients}
+                                            handleSetPopup={() => setIngredientPopupFlag(true)}
+                                        />
                                     </div>
                                     <div className="md:w-7/12">
-                                        <p className="p-1 m-2 w-20 text-center bg-orange-200 rounded-md">作り方</p>
-                                        <div className="mx-8 py-2">
-                                            {steps.map((step, index) => {
-                                                return (
-                                                    <div className="flex mb-2">
-                                                        <div className=" w-7 h-7 bg-orange-950 text-yellow-100 rounded-md text-center ">
-                                                            {step.order}
-                                                        </div>
-                                                        <p className="pl-3 w-full">{step.description}</p>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            onClick={() => setStepPopupFlag(true)}
-                                            className="block mx-auto my-1 py-1 px-5 border-2 border-orange-400 rounded-md"
-                                        >
-                                            作り方を編集
-                                        </button>
+                                        <StepsPreview steps={steps} handleSetPopup={() => setStepPopupFlag(true)} />
                                     </div>
                                 </div>
                                 <RecipeActiveInput setValue={setValue} defaultValue={watch('isActive')} />
@@ -166,11 +129,11 @@ const EditRecipe = () => {
 
                     <PopUpComponent
                         viewFlag={ingredientPopupFlag}
-                        setViewFlag={setingredientPopupFlag}
+                        setViewFlag={setIngredientPopupFlag}
                         children={
                             <IngredientsInput
                                 viewFlag={ingredientPopupFlag}
-                                setViewFlag={setingredientPopupFlag}
+                                setViewFlag={setIngredientPopupFlag}
                                 ingredients={ingredients}
                                 setIngredients={setIngredients}
                             />

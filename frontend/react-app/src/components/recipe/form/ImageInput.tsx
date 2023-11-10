@@ -22,13 +22,9 @@ const ImageInput: React.FC<ImageInputProps> = ({ setImage, defult_image_src }) =
         <div>
             <label htmlFor="file-button" className="md:w-1/2 cursor-pointer block mx-auto relative">
                 {preview ? (
-                    <img src={preview} alt="preview img" className="object-cover w-full h-full" />
+                    <img src={preview} alt="preview img" className="object-cover w-full" />
                 ) : (
-                    <img
-                        src={defult_image_src}
-                        alt="sample"
-                        style={{ margin: '0 auto', width: '450px', height: '300px' }}
-                    />
+                    <img src={defult_image_src} alt="sample" className="object-cover mx-auto" />
                 )}
                 <input
                     accept="image/png, image/jpeg, image/jpg"
