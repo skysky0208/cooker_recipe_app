@@ -6,7 +6,7 @@ type Props = {
     children: ReactNode; // IngredientsInput コンポーネントを含む任意の要素を受け入れる
 };
 
-export const PopUpComponent = memo((props: Props) => {
+const PopUpComponent = memo((props: Props) => {
     const { viewFlag, setViewFlag, children } = props;
     const popupRef = useRef<HTMLDivElement>(null);
 
@@ -77,3 +77,5 @@ export const PopUpComponent = memo((props: Props) => {
         </>
     );
 });
+
+export default PopUpComponent;

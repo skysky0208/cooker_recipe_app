@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import AlertMessage from 'components/AlertMessage';
-import { PopUpComponent } from 'components/PopUpComponent';
+import { AlertMessage, PopUpComponent } from 'components/common';
 import {
     RecipeTitleInput,
     RecipeTimeInput,
@@ -12,20 +11,21 @@ import {
     IngredientsInput,
     RecipeServingsInput,
     StepsInput,
-} from 'features/Recipe/components';
+    SubmitButton,
+    ImageInput,
+} from 'components/recipe';
 
-import { UpdateRecipeData, Recipe, Ingredient, UpdateRecipeFormData, Step } from 'interfaces';
+import { RecipeData, Recipe, Ingredient, RecipeFormData, Step } from 'interfaces';
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
 
 const EditRecipe = () => {
-    const { register, handleSubmit, setValue, watch } = useForm<UpdateRecipeData>();
+    const { register, handleSubmit, setValue, watch } = useForm<RecipeData>();
 
     const navigate = useNavigate();
     const { id } = useParams<{ id: string | undefined }>();
 
     const [recipe, setRecipe] = useState<Recipe>();
     const [image, setImage] = useState<string>('');
-    const [preview, setPreview] = useState<string>('');
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [steps, setSteps] = useState<Step[]>([]);
 
@@ -34,25 +34,14 @@ const EditRecipe = () => {
     const [ingredientPopupFlag, setingredientPopupFlag] = useState<boolean>(false);
     const [stepPopupFlag, setStepPopupFlag] = useState<boolean>(false);
 
-    const updateFormData = (data: any): UpdateRecipeFormData => {
+    const updateFormData = (data: any): RecipeFormData => {
         const formData = new FormData();
 
         Object.keys(data).forEach((key) => {
             formData.append(key, data[key]);
         });
         if (image) formData.append('image', image);
-        console.log(formData);
         return formData;
-    };
-
-    const handleImageChange = (e: any) => {
-        const file = e.target.files[0];
-        if (file) {
-            setPreview(window.URL.createObjectURL(file));
-            setImage(file);
-        } else {
-            setImage('');
-        }
     };
 
     const handleGetRecipe = async () => {
@@ -85,7 +74,7 @@ const EditRecipe = () => {
         setLoading(false);
     };
 
-    const handleUpdateRecipe = async (data: UpdateRecipeData) => {
+    const handleUpdateRecipe = async (data: RecipeData) => {
         try {
             const formdata = updateFormData(data);
             console.log(formdata);
@@ -93,7 +82,7 @@ const EditRecipe = () => {
             console.log(res);
 
             if (res.data.status === 200) {
-                navigate(`/recipes/new`);
+                navigate('/');
             } else {
                 setAlertMessageOpen(true);
             }
@@ -114,34 +103,8 @@ const EditRecipe = () => {
                     <form>
                         <div className="p-4 sm:p-7 flex justify-center ">
                             <div className="grid gap-y-4 w-full">
-                                <RecipeTitleInput register={register} />
-                                <div>
-                                    <label
-                                        htmlFor="file-button"
-                                        className="md:w-1/2 cursor-pointer block mx-auto border border-gray-300 relative"
-                                    >
-                                        {preview ? (
-                                            <img
-                                                src={preview}
-                                                alt="preview img"
-                                                className="object-cover w-full h-full"
-                                            />
-                                        ) : (
-                                            <img
-                                                src={recipe?.image.url}
-                                                alt="current img"
-                                                className="object-cover w-full h-full"
-                                            />
-                                        )}
-                                        <input
-                                            accept="image/*"
-                                            id="file-button"
-                                            type="file"
-                                            className="hidden"
-                                            onChange={handleImageChange}
-                                        />
-                                    </label>
-                                </div>
+                                <RecipeTitleInput register={register} isBorder={true} />
+                                <ImageInput defult_image_src={recipe?.image.url} setImage={setImage} />
 
                                 <RecipeTimeInput register={register} setValue={setValue} />
                                 <RecipeCaptionInput register={register} />
@@ -196,13 +159,7 @@ const EditRecipe = () => {
                                     </div>
                                 </div>
                                 <RecipeActiveInput setValue={setValue} defaultValue={watch('isActive')} />
-                                <button
-                                    type="submit"
-                                    onClick={handleSubmit(handleUpdateRecipe)}
-                                    className="block mx-auto py-3 px-8 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
-                                >
-                                    保存する
-                                </button>
+                                <SubmitButton handler={handleSubmit(handleUpdateRecipe)} />
                             </div>
                         </div>
                     </form>

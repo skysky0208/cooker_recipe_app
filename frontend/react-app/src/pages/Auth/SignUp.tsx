@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
-import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
+import { CustomCard, CustomCardHeader } from 'components/auth/styles';
 
-import AlertMessage from 'components/AlertMessage';
+import AlertMessage from 'components/common/AlertMessage';
 import { signUp } from 'lib/api/auth';
 import { SignUpParams } from 'interfaces/index';
 

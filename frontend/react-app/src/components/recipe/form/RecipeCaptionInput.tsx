@@ -1,9 +1,9 @@
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
-import { UpdateRecipeData } from 'interfaces';
+import { RecipeData } from 'interfaces';
 
 interface RecipeCaptionInputProps {
-    register: UseFormRegister<UpdateRecipeData>; // register 関数の型情報を指定
+    register: UseFormRegister<RecipeData>; // register 関数の型情報を指定
 }
 
 const RecipeCaptionInput: React.FC<RecipeCaptionInputProps> = ({ register }) => {

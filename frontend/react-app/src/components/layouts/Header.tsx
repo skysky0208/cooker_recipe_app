@@ -1,4 +1,4 @@
-import AuthHeaderButton from 'components/AuthHeaderButton';
+import AuthHeaderButton from 'components/common/AuthHeaderButton';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -12,12 +12,22 @@ const Header = () => {
                         <img src={`${process.env.PUBLIC_URL}/logo_header.png`} alt="logo" className="w-60" />
                     </a>
                     <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
-                        <a className="text-sm md:text-base font-bold hover:text-neutral-600  mr-3 md:mr-5">
+                        <button
+                            onClick={() => {
+                                navigate('/mypage');
+                            }}
+                            className="text-sm md:text-base font-bold hover:text-neutral-600  mr-3 md:mr-5"
+                        >
                             マイページ
-                        </a>
-                        <a className="text-sm md:text-base font-bold hover:text-neutral-600  mr-3 md:mr-5">
+                        </button>
+                        <button
+                            onClick={() => {
+                                navigate('/recipes');
+                            }}
+                            className="text-sm md:text-base font-bold hover:text-neutral-600  mr-3 md:mr-5"
+                        >
                             レシピ一覧
-                        </a>
+                        </button>
                         <button
                             onClick={() => {
                                 navigate('/recipes/new');

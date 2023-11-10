@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import { RecipeDataForShow } from 'interfaces';
 import { getRecipe } from 'lib/api/recipes';
-import { AuthorOutput, IngredientsList, RecipeTimeOutput, StepsList } from 'features/Recipe/components';
+import { AuthorOutput, IngredientsList, RecipeTimeOutput, StepsList } from 'components/recipe';
 
 const ShowRecipe = () => {
     const { id } = useParams<{ id: string | undefined }>();

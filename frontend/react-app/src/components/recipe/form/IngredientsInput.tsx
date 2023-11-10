@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import AlertMessage from 'components/AlertMessage';
+import AlertMessage from 'components/common/AlertMessage';
 
 import { Ingredient } from 'interfaces';
 import { updateIngredients } from 'lib/api/ingredients';

@@ -1,61 +1,50 @@
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
-import { CustomCard, CustomCardHeader } from 'features/Auth/styles';
+import AlertMessage from 'components/common/AlertMessage';
+import { RecipeTitleInput, RecipeTimeInput, SubmitButton, ImageInput } from 'components/recipe';
 
-import AlertMessage from 'components/AlertMessage';
-import { AuthContext } from 'App';
-import { CreateRecipeFormData } from 'interfaces';
+import { RecipeData, RecipeFormData } from 'interfaces';
 import { createRecipe } from 'lib/api/recipes';
 
 const CreateRecipe = () => {
+    const { register, handleSubmit, setValue, watch } = useForm<RecipeData>();
     const navigate = useNavigate();
 
-    const { currentUser } = useContext(AuthContext);
-
-    const [title, setTitle] = useState<string>('');
-    const [pressTime, setPressTime] = useState<number>(0);
-    const [preparationTime, setPreparationTime] = useState<number>(0);
-    const [image, setImage] = useState<File>();
-    const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+    const [image, setImage] = useState<string>('');
     const [preview, setPreview] = useState<string>('');
 
-    // 画像プレビューを表示
-    const previewImage = useCallback((e: any) => {
+    const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+
+    const handleImageChange = (e: any) => {
         const file = e.target.files[0];
         if (file) {
-            const blob = new Blob([file], { type: file.type });
-            setPreview(window.URL.createObjectURL(blob));
+            setPreview(window.URL.createObjectURL(file));
             setImage(file);
+        } else {
+            setImage('');
         }
-    }, []);
+    };
 
     // フォームデータを作成
-    const createFormData = (): CreateRecipeFormData => {
+    const createFormData = (data: any): RecipeFormData => {
         const formData = new FormData();
 
-        formData.append('title', title);
-        formData.append('pressTime', pressTime.toString());
-        formData.append('preparationTime', preparationTime.toString());
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+        });
         if (image) formData.append('image', image);
-
         return formData;
     };
 
-    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-
-        const data = createFormData();
-
+    const handleCreateRecipe = async (data: RecipeData) => {
         try {
-            const res = await createRecipe(data);
+            const formdata = createFormData(data);
+            const res = await createRecipe(formdata);
             console.log(res);
 
-            if (res.status === 200) {
-                setTitle('');
-                setPressTime(0);
-                setPreparationTime(0);
+            if (res.data.status === 200) {
                 navigate(`/recipes/${res.data.id}/edit`);
             } else {
                 setAlertMessageOpen(true);
@@ -65,117 +54,30 @@ const CreateRecipe = () => {
             setAlertMessageOpen(true);
         }
     };
-
     return (
         <>
-            <form noValidate autoComplete="off">
-                <CustomCard>
-                    <CustomCardHeader title="レシピを書く" style={{ textAlign: 'center' }} />
-                    <CardContent>
-                        <TextField
-                            style={{ marginRight: '20px' }}
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="レシピのタイトル"
-                            size="small"
-                            value={title}
-                            margin="dense"
-                            onChange={(event) => setTitle(event.target.value)}
-                        />
-
-                        <div>
-                            <label htmlFor="file-button">
-                                {preview ? (
-                                    <img
-                                        src={preview}
-                                        alt="preview img"
-                                        style={{ margin: '0 auto', width: '450px', height: '300px' }}
-                                    />
-                                ) : (
-                                    <img
-                                        src={`${process.env.PUBLIC_URL}/sample-recipe-img.png`}
-                                        alt="sample"
-                                        style={{ margin: '0 auto', width: '450px', height: '300px' }}
-                                    />
-                                )}
-                            </label>
-                            <input
-                                accept="image/*"
-                                id="file-button"
-                                type="file"
-                                style={{ display: 'none' }}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    previewImage(e);
-                                }}
+            <div className="w-full md:mx-3 lg:w-2/3 lg:my-5 bg-white border border-gray-200 lg:rounded-xl shadow-sm">
+                <form>
+                    <div className="p-4 sm:p-7 flex justify-center ">
+                        <div className="grid gap-y-4 w-full">
+                            <RecipeTitleInput register={register} isBorder={false} />
+                            <ImageInput
+                                defult_image_src={`${process.env.PUBLIC_URL}/sample-recipe-img.png`}
+                                setImage={setImage}
                             />
+                            <RecipeTimeInput register={register} setValue={setValue} />
+                            <SubmitButton handler={handleSubmit(handleCreateRecipe)} />
                         </div>
+                    </div>
+                </form>
 
-                        <TextField
-                            style={{ marginRight: '20px' }}
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="準備時間"
-                            size="small"
-                            value={preparationTime}
-                            margin="dense"
-                            type="number"
-                            onChange={(event) => setPreparationTime(parseInt(event.target.value, 10))}
-                            inputProps={{
-                                inputMode: 'numeric',
-                                pattern: '[0-9]*',
-                            }}
-                        />
-
-                        <TextField
-                            style={{ marginRight: '20px' }}
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="加圧時間"
-                            size="small"
-                            value={pressTime}
-                            margin="dense"
-                            type="number"
-                            onChange={(event) => setPressTime(parseInt(event.target.value, 10))}
-                            inputProps={{
-                                inputMode: 'numeric',
-                                pattern: '[0-9]*',
-                            }}
-                        />
-
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            fullWidth
-                            disabled={!title || !pressTime || !preparationTime ? true : false}
-                            onClick={handleSubmit}
-                        >
-                            材料や手順を記入する
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="outlined"
-                            size="large"
-                            style={{ marginTop: '10px' }}
-                            fullWidth
-                            onClick={() => {
-                                navigate('/');
-                            }}
-                        >
-                            キャンセル
-                        </Button>
-                    </CardContent>
-                </CustomCard>
-            </form>
-            <AlertMessage // エラーが発生した場合はアラートを表示
-                open={alertMessageOpen}
-                setOpen={setAlertMessageOpen}
-                severity="error"
-                message="必須項目を埋めてください"
-            />
+                <AlertMessage // エラーが発生した場合はアラートを表示
+                    open={alertMessageOpen}
+                    setOpen={setAlertMessageOpen}
+                    severity="error"
+                    message="保存できませんでした"
+                />
+            </div>
         </>
     );
 };

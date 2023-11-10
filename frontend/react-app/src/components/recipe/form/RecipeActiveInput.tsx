@@ -1,8 +1,8 @@
 import { UseFormSetValue } from 'react-hook-form';
-import { UpdateRecipeData } from 'interfaces';
+import { RecipeData } from 'interfaces';
 
 interface RecipeActiveInputProps {
-    setValue: UseFormSetValue<UpdateRecipeData>;
+    setValue: UseFormSetValue<RecipeData>;
     defaultValue: boolean | undefined;
 }
 

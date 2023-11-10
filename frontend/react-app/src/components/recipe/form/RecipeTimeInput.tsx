@@ -1,11 +1,11 @@
 import React from 'react';
-import { zenkaku2Hankaku } from 'features/Recipe/function';
+import { zenkaku2Hankaku } from 'function/recipe_function';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { UpdateRecipeData } from 'interfaces';
+import { RecipeData } from 'interfaces';
 
 interface RecipeTimeInputProps {
-    setValue: UseFormSetValue<UpdateRecipeData>;
-    register: UseFormRegister<UpdateRecipeData>; // register 関数の型情報を指定
+    setValue: UseFormSetValue<RecipeData>;
+    register: UseFormRegister<RecipeData>; // register 関数の型情報を指定
 }
 
 const RecipeTimeInput: React.FC<RecipeTimeInputProps> = ({ register, setValue }) => {

@@ -2,8 +2,8 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { EmailForm, PasswordForm } from 'features/Auth/components/index';
-import AlertMessage from 'components/AlertMessage';
+import { EmailForm, PasswordForm } from 'components/auth';
+import AlertMessage from 'components/common/AlertMessage';
 
 import { AuthContext } from 'App';
 import { signIn } from 'lib/api/auth';

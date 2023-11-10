@@ -54,19 +54,20 @@ export interface CreateRecipeFormData extends FormData {
     append(name: keyof CreateRecipeData, value: String | Blob, fileName?: string): any;
 }
 
-export interface UpdateRecipeData {
-    title?: string;
-    caption?: string;
-    pressTime?: number;
-    preparationTime?: number;
+export interface RecipeData {
+    title: string;
+    caption: string;
+    pressTime: number;
+    preparationTime: number;
     image?: string;
-    servings?: number;
+    servings: number;
     isActive?: boolean;
     ingredients?: Ingredient[];
+    steps?: Step[];
 }
 
-export interface UpdateRecipeFormData extends FormData {
-    append(name: keyof UpdateRecipeData, value: String | Blob, fileName?: string): any;
+export interface RecipeFormData extends FormData {
+    append(name: keyof RecipeData, value: String | Blob, fileName?: string): any;
 }
 
 export interface Ingredient {

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { useFieldArray, useForm } from 'react-hook-form';
 
-import AlertMessage from 'components/AlertMessage';
+import AlertMessage from 'components/common/AlertMessage';
 
 import { Step } from 'interfaces';
 import { updateSteps } from 'lib/api/steps';

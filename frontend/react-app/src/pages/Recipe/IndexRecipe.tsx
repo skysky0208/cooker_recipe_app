@@ -4,9 +4,9 @@ import ReactPaginate from 'react-paginate';
 
 import { Pagination, RecipeDataForIndex } from 'interfaces';
 import { getRecipes } from 'lib/api/recipes';
-import { formatIngredients } from 'features/Recipe/function';
+import { formatIngredients } from 'function/recipe_function';
 
-import { RecipeTimeOutput } from 'features/Recipe/components';
+import { RecipeTimeOutput } from 'components/recipe';
 
 const IndexRecipe = () => {
     const navigate = useNavigate();
@@ -53,7 +53,7 @@ const IndexRecipe = () => {
     return (
         <>
             {!loading ? (
-                <div className="w-fullmd:w-2/3 md:my-5 ">
+                <div className="w-full md:w-2/3 md:my-5 ">
                     <div className=" md:grid lg:grid-cols-2 gap-2">
                         {recipes.map((recipe: RecipeDataForIndex, index) => (
                             <Link to={`/recipes/${recipe.id}`} key={index}>
