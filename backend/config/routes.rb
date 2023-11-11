@@ -15,6 +15,8 @@ Rails.application.routes.draw do
         resource :ingredients, only: [:show, :update]
         resource :steps, only: [:show, :update]
       end
+
+      get '/mypage' => "users#mypage"
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
