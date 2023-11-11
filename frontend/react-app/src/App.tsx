@@ -13,6 +13,7 @@ import ShowRecipe from 'pages/Recipe/ShowRecipe';
 import IndexRecipe from 'pages/Recipe/IndexRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
+import Mypage from 'pages/User/Mypage';
 
 // グローバルで扱う変数・関数
 export const AuthContext = createContext(
@@ -107,6 +108,15 @@ const App = () => {
                             element={
                                 <Private>
                                     <EditRecipe />
+                                </Private>
+                            }
+                        />
+
+                        <Route
+                            path="/mypage"
+                            element={
+                                <Private>
+                                    <Mypage />
                                 </Private>
                             }
                         />

@@ -54,7 +54,7 @@ const IndexRecipe = () => {
         <>
             {!loading ? (
                 <div className="w-full md:w-2/3 md:my-5 ">
-                    <div className=" md:grid lg:grid-cols-2 gap-2">
+                    <div className="md:grid lg:grid-cols-2 gap-2">
                         {recipes.map((recipe: RecipeDataForIndex, index) => (
                             <Link to={`/recipes/${recipe.id}`} key={index}>
                                 <div className="flex items-center bg-white border-t border-b border-gray-200 md:rounded-lg md:gap-2 shadow md:flex-row md:max-w-xl hover:bg-gray-100">
