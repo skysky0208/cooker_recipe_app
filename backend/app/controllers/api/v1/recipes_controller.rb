@@ -1,6 +1,6 @@
 class Api::V1::RecipesController < ApplicationController
     include Pagination
-    before_action :authenticate_api_v1_user!, only: [:create, :edit, :update]
+    before_action :authenticate_api_v1_user!, only: [:create, :edit, :update, :delete]
     before_action :set_recipe, only: [:edit, :show, :update]
 
     def create
@@ -58,10 +58,19 @@ class Api::V1::RecipesController < ApplicationController
             end
 
             if @recipe.update(recipe_params.except(:image))
-                render json: {status: 200, id: @recipe.id}
+                render json: { status: 200, id: @recipe.id}
             else
                 render json: { status: 500, message: "更新に失敗しました"}
             end
+        end
+    end
+
+    def destroy
+        recipe = Recipe.find(params[:id])
+        if recipe.delete
+            render json: { status: 200, message: "削除しました" }
+        else
+            render json: { status: 200, message: "削除に失敗しました" }
         end
     end
 
