@@ -14,7 +14,7 @@ const StepsPreview: React.FC<Props> = ({ steps, handleSetPopup }) => {
             <div className="mx-8 py-2">
                 {steps.map((step, index) => {
                     return (
-                        <div className="flex mb-2">
+                        <div className="flex mb-2" key={index}>
                             <div className=" w-7 h-7 bg-orange-950 text-yellow-100 rounded-md text-center ">
                                 {step.order}
                             </div>

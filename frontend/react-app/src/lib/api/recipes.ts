@@ -45,7 +45,7 @@ export const updateRecipe = (id: string | undefined, data: RecipeFormData) => {
     return client.put(`recipes/${id}`, data, { headers: headers });
 };
 
-export const deleteRecipe = (id: string | undefined) => {
+export const deleteRecipe = (id: number | undefined) => {
     const headers = {
         'access-token': Cookies.get('_access_token'),
         client: Cookies.get('_client'),

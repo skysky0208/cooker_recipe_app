@@ -113,6 +113,8 @@ const EditRecipe = () => {
                                 <div className="grid gap-4 md:flex">
                                     <div className="md:w-5/12">
                                         <IngredientsPreview
+                                            setValue={setValue}
+                                            register={register}
                                             ingredients={ingredients}
                                             handleSetPopup={() => setIngredientPopupFlag(true)}
                                         />
