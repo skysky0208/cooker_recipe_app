@@ -50,6 +50,8 @@ test:
 #
 production:
   <<: *default
-  database: <%= ENV["DATABASE_NAME"] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  socket: /var/lib/mysql/mysql.sock
+  database: cook_api_production
   username: <%= ENV["DATABASE_USERNAME"] %>
   password: <%= ENV["DATABASE_PASSWORD"] %>
