@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,23 +9,12 @@ import { RecipeData, RecipeFormData } from 'interfaces';
 import { createRecipe } from 'lib/api/recipes';
 
 const CreateRecipe = () => {
-    const { register, handleSubmit, setValue, watch } = useForm<RecipeData>();
+    const { register, handleSubmit, setValue } = useForm<RecipeData>();
     const navigate = useNavigate();
 
     const [image, setImage] = useState<string>('');
-    const [preview, setPreview] = useState<string>('');
 
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
-
-    const handleImageChange = (e: any) => {
-        const file = e.target.files[0];
-        if (file) {
-            setPreview(window.URL.createObjectURL(file));
-            setImage(file);
-        } else {
-            setImage('');
-        }
-    };
 
     // フォームデータを作成
     const createFormData = (data: any): RecipeFormData => {
