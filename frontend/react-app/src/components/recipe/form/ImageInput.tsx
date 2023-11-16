@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Area, MediaSize } from 'react-easy-crop';
-import CropperModal from './CropperModel';
-import getCroppedImg from './getCroppedImg';
+import CropperModal from '../crop/CropperModel';
+import getCroppedImg from 'function/croppingImg_function';
 export const ASPECT_RATIO = 4 / 3;
 export const CROP_WIDTH = 400;
 
@@ -28,16 +28,6 @@ const ImageInput: React.FC<ImageInputProps> = ({ setImage, defult_image_src }) =
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     /** 切り取る領域の情報 */
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
-
-    const handleImageChange = (e: any) => {
-        const file = e.target.files[0];
-        if (file) {
-            setPreview(window.URL.createObjectURL(file));
-            setImage(file);
-        } else {
-            setImage('');
-        }
-    };
 
     const onFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -86,7 +76,7 @@ const ImageInput: React.FC<ImageInputProps> = ({ setImage, defult_image_src }) =
         } catch (e) {
             console.error(e);
         }
-    }, [croppedAreaPixels, imgSrc]);
+    }, [croppedAreaPixels, imgSrc, setImage]);
 
     return (
         <div>

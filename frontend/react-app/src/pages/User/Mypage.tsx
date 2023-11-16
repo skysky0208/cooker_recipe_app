@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
-
-import { DeleteButton, EditButton } from 'components/user';
+import { useNavigate } from 'react-router-dom';
 
 import { getUserForMypage } from 'lib/api/user';
 import { User, Recipe } from 'interfaces';

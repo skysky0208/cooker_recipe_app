@@ -1,7 +1,7 @@
 import { makeStyles, Modal } from '@material-ui/core';
 import React from 'react';
 import Cropper, { Area, MediaSize } from 'react-easy-crop';
-import { ASPECT_RATIO, CROP_WIDTH } from './ImageInput';
+import { ASPECT_RATIO, CROP_WIDTH } from '../form/ImageInput';
 
 const useStyles = makeStyles({
     root: {
