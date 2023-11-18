@@ -16,7 +16,8 @@ Rails.application.routes.draw do
         resource :steps, only: [:show, :update]
       end
 
-      get '/mypage' => "users#mypage"
+      get 'mypage' => "users#mypage"
+      get 'search' => "searches#search"
     end
   end
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

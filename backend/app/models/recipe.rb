@@ -9,4 +9,8 @@ class Recipe < ApplicationRecord
     validates :press_time, presence: true
     validates :preparation_time, presence: true
 
+    def self.get_active_recipes
+        Recipe.where(is_active: true)
+    end
+
 end
