@@ -1,11 +1,11 @@
-import { CreateRecipeFormData, RecipeFormData } from 'interfaces';
 import client from './client';
 
-export const searchRecipes = (page: string | null, keyword: string) => {
+export const searchRecipes = (page: string | null, keyword: string, option: string | undefined) => {
     return client.get('search', {
         params: {
             page: page,
             keyword: keyword,
+            option: option,
         },
     });
 };

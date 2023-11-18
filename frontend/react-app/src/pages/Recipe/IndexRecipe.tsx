@@ -55,7 +55,7 @@ const IndexRecipe = () => {
         <>
             {!loading ? (
                 <div className="w-full md:w-2/3 md:my-5 ">
-                    <div className="search-form md:mb-5">
+                    <div className="search-form md:w-1/2 md:mb-3">
                         <SearchBar setPagination={setPagination} setRecipes={setRecipes} />
                     </div>
 
