@@ -2,8 +2,19 @@ class Api::V1::SearchesController < ApplicationController
     include Pagination
     def search
         keyword = params[:keyword]
+        option = params[:option]
 
-        recipes = Recipe.get_active_recipes.where("title LIKE?", "%#{keyword}%").includes(:ingredients).page(params[:page]).per(10)
+        if keyword.present?
+            if option == "title"
+                recipes = Recipe.get_active_recipes.where("title LIKE?", "%#{keyword}%").includes(:ingredients).page(params[:page]).per(10)
+            elsif option == "ingredient"
+                recipes = Recipe.has_ingredient_name_like(keyword).page(params[:page]).per(10)
+            end
+        else
+            recipes = Recipe.get_active_recipes.page(params[:page]).per(10)
+        end
+        
+
         pagination = resources_with_pagination(recipes)
         
         recipes_json = recipes.as_json(

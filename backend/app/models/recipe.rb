@@ -13,4 +13,8 @@ class Recipe < ApplicationRecord
         Recipe.where(is_active: true)
     end
 
+    scope :has_ingredient_name_like, -> ingredient_name {
+        joins(:ingredients).merge(Ingredient.name_like ingredient_name)
+    }
+
 end
