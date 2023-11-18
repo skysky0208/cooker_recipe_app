@@ -19,7 +19,6 @@ export const getRecipe = (id: string | undefined) => {
 export const getRecipes = (page: string | null) => {
     return client.get('recipes', {
         params: {
-            // ここにクエリパラメータを指定する
             page: page,
         },
     });
