@@ -7,7 +7,7 @@ import { getRecipes } from 'lib/api/recipes';
 import { formatIngredients } from 'function/recipe_function';
 
 import { RecipeTimeOutput } from 'components/recipe';
-import SearchBar from 'components/common/SearchBar';
+import SarchSortArea from 'components/user/area/SearchSortArea';
 
 const IndexRecipe = () => {
     const navigate = useNavigate();
@@ -27,10 +27,10 @@ const IndexRecipe = () => {
         navigate(`/recipes?page=${pageNumber}`);
     };
 
-    const handleGetRecipes = async () => {
+    const handleGetRecipes = async (keyword?: string, option?: string, sortedBy?: string) => {
         try {
             const query_page = query.get('page');
-            const res = await getRecipes(query_page);
+            const res = await getRecipes(query_page, keyword, option, sortedBy);
             console.log(res);
 
             if (res.data.status === 200 && res.data.recipes) {
@@ -49,16 +49,13 @@ const IndexRecipe = () => {
 
     useEffect(() => {
         handleGetRecipes();
-    }, [search]);
+    }, []);
 
     return (
         <>
             {!loading ? (
                 <div className="w-full md:w-2/3 md:my-5 ">
-                    <div className="search-form md:w-1/2 md:mb-3">
-                        <SearchBar setPagination={setPagination} setRecipes={setRecipes} />
-                    </div>
-
+                    <SarchSortArea handleGetRecipes={handleGetRecipes} />
                     <div className="recipes-content">
                         <div className="md:grid lg:grid-cols-2 gap-2">
                             {recipes.map((recipe: RecipeDataForIndex, index) => (

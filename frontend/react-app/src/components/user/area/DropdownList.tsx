@@ -23,7 +23,7 @@ const DropdownList: React.FC<DropdownListProps> = ({ options, selectedOption, se
                 onChange={handleSelectOption}
                 onFocus={() => setArrowActive(true)}
                 onBlur={() => setArrowActive(false)}
-                className="px-2 bg-gray-50 border border-gray-300 text-sm"
+                className="px-2 bg-gray-50 border border-gray-300 text-sm rounded-s-lg"
             >
                 {options.map((option) => (
                     <option key={option.value} value={option.value}>
