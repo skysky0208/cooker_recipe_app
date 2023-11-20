@@ -17,4 +17,8 @@ class Recipe < ApplicationRecord
         joins(:ingredients).merge(Ingredient.name_like ingredient_name)
     }
 
+    scope :sort_latest, -> {order(created_at: :desc)}
+    scope :sort_preparation_time, -> {order(preparation_time: :asc)}
+    scope :sort_press_time, -> {order(press_time: :asc)}
+
 end
