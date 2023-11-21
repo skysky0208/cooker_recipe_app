@@ -15,8 +15,29 @@ class Api::V1::RecipesController < ApplicationController
     end
 
     def index
-        recipes = Recipe.where(is_active: true).includes(:ingredients).page(params[:page]).per(10)
-        pagination = resources_with_pagination(recipes)
+        recipes = Recipe.where(is_active: true)
+        keyword = params[:keyword]
+
+        if keyword.present?
+            if params[:option] == "title"
+                recipes = recipes.where("title LIKE?", "%#{keyword}%")
+            elsif params[:option] == "ingredient"
+                recipes = recipes.has_ingredient_name_like(keyword)
+            end
+        end
+
+        if params[:sorted_by].present?
+            if params[:sorted_by] == "preparation_time"
+                recipes = recipes.sort_preparation_time
+            elsif params[:sorted_by] == "press_time"
+                recipes = recipes.sort_press_time
+            else
+                recipes = recipes.sort_latest
+            end
+        end
+
+        page_recipes = recipes.page(params[:page]).per(10)
+        pagination = resources_with_pagination(page_recipes)
         
         recipes_json = recipes.as_json(
             only: [:id, :title, :preparation_time, :press_time, :image],
