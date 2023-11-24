@@ -26,7 +26,6 @@ const ShowRecipe = () => {
     const handleGetRecipe = async () => {
         try {
             const res = await getRecipe(id);
-            console.log(res);
 
             if (res.data.status === 200 && res.data.recipe) {
                 setRecipe(res.data.recipe);

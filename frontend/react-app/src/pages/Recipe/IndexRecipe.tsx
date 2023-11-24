@@ -31,12 +31,10 @@ const IndexRecipe = () => {
         try {
             const query_page = query.get('page');
             const res = await getRecipes(query_page, keyword, option, sortedBy);
-            console.log(res);
 
             if (res.data.status === 200 && res.data.recipes) {
                 setRecipes(res.data.recipes);
                 setPagination(res.data.pagination);
-                console.log(pagination);
             } else {
                 navigate('/');
             }

@@ -41,10 +41,8 @@ const SignUp = () => {
 
         try {
             const res = await signUp(params);
-            console.log(res);
 
             if (res.status === 200) {
-                console.log('confirm email');
                 Cookies.set('_access_token', res.headers['access-token']);
                 Cookies.set('_client', res.headers['client']);
                 Cookies.set('_uid', res.headers['uid']);

@@ -42,7 +42,6 @@ const SarchSortArea: React.FC<SarchSortAreaProps> = ({ handleGetRecipes }) => {
 
     const changeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSortedBy(event.target.value);
-        console.log(sortedBy);
     };
 
     return (

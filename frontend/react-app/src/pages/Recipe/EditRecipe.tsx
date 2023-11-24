@@ -48,7 +48,6 @@ const EditRecipe = () => {
     const handleGetRecipe = async () => {
         try {
             const res = await getRecipeForEdit(id);
-            console.log(res);
 
             if (res.data.status === 200 && res.data.recipe) {
                 setValue('title', res.data.recipe.title);

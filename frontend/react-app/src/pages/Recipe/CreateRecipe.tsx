@@ -31,7 +31,6 @@ const CreateRecipe = () => {
         try {
             const formdata = createFormData(data);
             const res = await createRecipe(formdata);
-            console.log(res);
 
             if (res.data.status === 200) {
                 navigate(`/recipes/${res.data.id}/edit`);
