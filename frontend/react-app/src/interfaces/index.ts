@@ -5,7 +5,6 @@ export interface SignUpParams {
     email: string;
     password: string;
     passwordConfirmation: string;
-    confirmSuccessUrl: string;
 }
 
 export interface SignInParams {
@@ -109,4 +108,9 @@ export interface Pagination {
     current: number;
     limit_value: number;
     pages: number;
+}
+
+export interface Option {
+    value: string;
+    label: string;
 }

@@ -7,6 +7,7 @@ import { getRecipes } from 'lib/api/recipes';
 import { formatIngredients } from 'function/recipe_function';
 
 import { RecipeTimeOutput } from 'components/recipe';
+import SarchSortArea from 'components/user/area/SearchSortArea';
 
 const IndexRecipe = () => {
     const navigate = useNavigate();
@@ -26,10 +27,10 @@ const IndexRecipe = () => {
         navigate(`/recipes?page=${pageNumber}`);
     };
 
-    const handleGetRecipes = async () => {
+    const handleGetRecipes = async (keyword?: string, option?: string, sortedBy?: string) => {
         try {
             const query_page = query.get('page');
-            const res = await getRecipes(query_page);
+            const res = await getRecipes(query_page, keyword, option, sortedBy);
             console.log(res);
 
             if (res.data.status === 200 && res.data.recipes) {
@@ -48,38 +49,42 @@ const IndexRecipe = () => {
 
     useEffect(() => {
         handleGetRecipes();
-    }, [search]);
+    }, []);
 
     return (
         <>
             {!loading ? (
                 <div className="w-full md:w-2/3 md:my-5 ">
-                    <div className="md:grid lg:grid-cols-2 gap-2">
-                        {recipes.map((recipe: RecipeDataForIndex, index) => (
-                            <Link to={`/recipes/${recipe.id}`} key={index}>
-                                <div className="flex items-center bg-white border-t border-b border-gray-200 md:rounded-lg md:gap-2 shadow md:flex-row md:max-w-xl hover:bg-gray-100">
-                                    <img
-                                        className="m-2 w-40 h-32 object-cover rounded-lg"
-                                        src={recipe.image.url}
-                                        alt="recipe-img"
-                                    />
-                                    <div className="w-full p-2">
-                                        <h5 className="mb-1 text-lg font-bold tracking-tight text-gray-900">
-                                            {recipe.title}
-                                        </h5>
-                                        <p className="mb-3 text-sm text-gray-700">
-                                            {formatIngredients(recipe.ingredients)}
-                                        </p>
-                                        <RecipeTimeOutput
-                                            preparationTime={recipe.preparationTime}
-                                            pressTime={recipe.pressTime}
-                                            isSmall={true}
+                    <SarchSortArea handleGetRecipes={handleGetRecipes} />
+                    <div className="recipes-content">
+                        <div className="md:grid lg:grid-cols-2 gap-2">
+                            {recipes.map((recipe: RecipeDataForIndex, index) => (
+                                <Link to={`/recipes/${recipe.id}`} key={index}>
+                                    <div className="flex items-center bg-white border-t border-b border-gray-200 md:rounded-lg md:gap-2 shadow md:flex-row md:max-w-xl hover:bg-gray-100">
+                                        <img
+                                            className="m-2 w-40 h-32 object-cover rounded-lg"
+                                            src={recipe.image.url}
+                                            alt="recipe-img"
                                         />
+                                        <div className="w-full p-2">
+                                            <h5 className="mb-1 text-lg font-bold tracking-tight text-gray-900">
+                                                {recipe.title}
+                                            </h5>
+                                            <p className="mb-3 text-sm text-gray-700">
+                                                {formatIngredients(recipe.ingredients)}
+                                            </p>
+                                            <RecipeTimeOutput
+                                                preparationTime={recipe.preparationTime}
+                                                pressTime={recipe.pressTime}
+                                                isSmall={true}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
+
                     <div className="paginate-list flex justify-center">
                         <ReactPaginate
                             pageCount={pagination.pages} //総ページ数

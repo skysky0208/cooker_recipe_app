@@ -16,11 +16,18 @@ export const getRecipe = (id: string | undefined) => {
     return client.get(`recipes/${id}`);
 };
 
-export const getRecipes = (page: string | null) => {
+export const getRecipes = (
+    page: string | null,
+    keyword: string | undefined,
+    option: string | undefined,
+    sortedBy: string | undefined
+) => {
     return client.get('recipes', {
         params: {
-            // ここにクエリパラメータを指定する
             page: page,
+            keyword: keyword,
+            option: option,
+            sortedBy: sortedBy,
         },
     });
 };

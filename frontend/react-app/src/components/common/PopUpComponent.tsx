@@ -2,7 +2,7 @@ import React, { memo, useEffect, useRef, ReactNode } from 'react';
 
 type Props = {
     viewFlag: boolean;
-    setViewFlag: React.Dispatch<React.SetStateAction<boolean>>;
+    setViewFlag: (viewFlag: boolean) => void;
     children: ReactNode; // IngredientsInput コンポーネントを含む任意の要素を受け入れる
 };
 

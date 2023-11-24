@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
 import { CustomCard, CustomCardHeader } from 'components/auth/styles';
 
+import { AuthContext } from 'App';
+import Cookies from 'js-cookie';
 import AlertMessage from 'components/common/AlertMessage';
 import { signUp } from 'lib/api/auth';
 import { SignUpParams } from 'interfaces/index';
 
 // サインアップ用ページ
 const SignUp = () => {
+    const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [firstName, setFirstName] = useState<string>('');
@@ -19,7 +22,6 @@ const SignUp = () => {
     const [password, setPassword] = useState<string>('');
     const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
-    const confirmSuccessUrl = 'http://localhost:3000/auth/success';
 
     const generateParams = () => {
         const data: SignUpParams = {
@@ -29,7 +31,6 @@ const SignUp = () => {
             email: email,
             password: password,
             passwordConfirmation: passwordConfirmation,
-            confirmSuccessUrl: confirmSuccessUrl,
         };
         return data;
     };
@@ -44,7 +45,15 @@ const SignUp = () => {
 
             if (res.status === 200) {
                 console.log('confirm email');
-                navigate('/auth/send', { replace: true });
+                Cookies.set('_access_token', res.headers['access-token']);
+                Cookies.set('_client', res.headers['client']);
+                Cookies.set('_uid', res.headers['uid']);
+
+                setIsSignedIn(true);
+                setCurrentUser(res.data.data);
+
+                navigate('/mypage', { replace: true });
+                // navigate('/auth/send', { replace: true });
             } else {
                 setAlertMessageOpen(true);
             }

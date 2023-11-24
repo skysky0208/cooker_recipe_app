@@ -57,3 +57,5 @@ gem 'carrierwave'
 
 # ページネーション
 gem 'kaminari'
+
+gem 'fog-aws'
