@@ -14,6 +14,7 @@ import IndexRecipe from 'pages/Recipe/IndexRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
 import Mypage from 'pages/User/Mypage';
+import NotFound from 'pages/NotFound';
 
 // グローバルで扱う変数・関数
 export const AuthContext = createContext(
@@ -111,6 +112,7 @@ const App = () => {
                                 </Private>
                             }
                         />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </CommonLayout>
             </AuthContext.Provider>
