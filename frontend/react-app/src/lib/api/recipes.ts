@@ -61,3 +61,11 @@ export const deleteRecipe = (id: number | undefined) => {
 
     return client.delete(`recipes/${id}`, { headers: headers });
 };
+
+export const getRecommendedRecipe = () => {
+    return client.get(`recipes/recommended`);
+};
+
+export const getRecentRecipes = () => {
+    return client.get(`recipes/recent`);
+};

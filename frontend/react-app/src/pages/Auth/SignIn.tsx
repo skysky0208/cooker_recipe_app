@@ -29,7 +29,6 @@ const SignIn = () => {
 
         try {
             const res = await signIn(params);
-            console.log(res);
 
             if (res.status === 200) {
                 // ログインに成功した場合はCookieに各値を格納
@@ -40,9 +39,7 @@ const SignIn = () => {
                 setIsSignedIn(true);
                 setCurrentUser(res.data.data);
 
-                navigate('/', { replace: true });
-
-                console.log('Signed in successfully!');
+                navigate('/mypage', { replace: true });
             } else {
                 setAlertMessageOpen(true);
             }

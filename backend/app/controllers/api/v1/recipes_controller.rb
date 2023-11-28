@@ -95,6 +95,16 @@ class Api::V1::RecipesController < ApplicationController
         end
     end
 
+    def recommended
+        @recommended_recipes = Recipe.where(is_active: true).sample(1)
+        render json: { recommended_recipe: @recommended_recipes[0] }
+    end
+    
+    def recent
+        @recent_recipes = Recipe.where(is_active: true).order(created_at: :desc).limit(3)
+        render json: { recent_recipes: @recent_recipes }
+    end
+
     private
         def set_recipe
             @recipe = Recipe.find_by(id: params[:id])

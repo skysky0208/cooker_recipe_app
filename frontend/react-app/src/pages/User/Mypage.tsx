@@ -17,7 +17,6 @@ const Mypage = () => {
     const handleGetUser = async () => {
         try {
             const res = await getUserForMypage();
-            console.log(res);
 
             if (res.data.status === 200) {
                 setUser(res.data.user);
