@@ -9,7 +9,12 @@ import { RecipeData, RecipeFormData } from 'interfaces';
 import { createRecipe } from 'lib/api/recipes';
 
 const CreateRecipe = () => {
-    const { register, handleSubmit, setValue } = useForm<RecipeData>();
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors, isValid },
+    } = useForm<RecipeData>();
     const navigate = useNavigate();
 
     const [image, setImage] = useState<string>('');
@@ -48,12 +53,12 @@ const CreateRecipe = () => {
                 <form>
                     <div className="p-4 sm:p-7 flex justify-center ">
                         <div className="grid gap-y-4 w-full">
-                            <RecipeTitleInput register={register} isBorder={false} />
+                            <RecipeTitleInput register={register} isBorder={false} errors={errors} />
                             <ImageInput
                                 defult_image_src={`${process.env.PUBLIC_URL}/sample-recipe-img.png`}
                                 setImage={setImage}
                             />
-                            <RecipeTimeInput register={register} setValue={setValue} />
+                            <RecipeTimeInput register={register} setValue={setValue} errors={errors} />
                             <SubmitButton handler={handleSubmit(handleCreateRecipe)} />
                         </div>
                     </div>
@@ -63,7 +68,7 @@ const CreateRecipe = () => {
                     open={alertMessageOpen}
                     setOpen={setAlertMessageOpen}
                     severity="error"
-                    message="保存できませんでした"
+                    message="画像を設定してください。"
                 />
             </div>
         </>
