@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { getRecommendedRecipe, getRecentRecipes } from 'lib/api/recipes';
-import { User, Recipe } from 'interfaces';
-import { RecipeTimeOutput } from 'components/recipe';
 import RecentRecipeArea from 'components/home/area/RecentRecipesArea';
 import { RecommendedRecipeCard } from 'components/home';
+
+import { getRecommendedRecipe, getRecentRecipes } from 'lib/api/recipes';
+import { Recipe } from 'interfaces';
 
 // とりあえず認証済みユーザーの名前やメールアドレスを表示
 const Home = () => {

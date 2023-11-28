@@ -1,6 +1,7 @@
 import React from 'react';
-import { Recipe } from 'interfaces';
 import { Link } from 'react-router-dom';
+
+import { Recipe } from 'interfaces';
 
 interface Props {
     recommendedRecipe: Recipe | undefined;

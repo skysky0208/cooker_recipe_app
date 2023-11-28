@@ -1,5 +1,6 @@
-import { Step } from 'interfaces';
 import React from 'react';
+
+import { Step } from 'interfaces';
 
 interface Props {
     steps: Step[];

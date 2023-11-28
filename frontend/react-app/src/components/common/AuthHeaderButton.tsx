@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { signOut } from 'lib/api/auth';
-
 import { AuthContext } from 'App';
 
 const AuthHeaderButton = () => {

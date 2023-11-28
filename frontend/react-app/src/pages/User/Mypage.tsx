@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { RecipeCards } from 'components/user';
+
 import { getUserForMypage } from 'lib/api/user';
 import { User, Recipe } from 'interfaces';
-import { RecipeCards } from 'components/user';
 
 const Mypage = () => {
     const navigate = useNavigate();

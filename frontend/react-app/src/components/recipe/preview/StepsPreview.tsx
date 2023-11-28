@@ -1,6 +1,8 @@
-import { Step } from 'interfaces';
 import React from 'react';
+
 import { EditButton } from 'components/recipe';
+
+import { Step } from 'interfaces';
 
 interface Props {
     steps: Step[];

@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-
-import { getUserForMypage } from 'lib/api/user';
-import { User, Recipe } from 'interfaces';
-import { RecipeCards } from 'components/user';
 
 const NotFound = () => {
     return (

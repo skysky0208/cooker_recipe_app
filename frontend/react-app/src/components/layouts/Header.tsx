@@ -1,5 +1,6 @@
-import AuthHeaderButton from 'components/common/AuthHeaderButton';
 import { useNavigate } from 'react-router-dom';
+
+import AuthHeaderButton from 'components/common/AuthHeaderButton';
 
 const Header = () => {
     const navigate = useNavigate();

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Recipe } from 'interfaces';
 import { Link } from 'react-router-dom';
+
 import { RecipeTimeOutput } from 'components/recipe';
+
+import { Recipe } from 'interfaces';
 
 interface Props {
     recipe: Recipe;

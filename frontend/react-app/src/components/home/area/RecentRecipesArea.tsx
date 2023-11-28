@@ -1,8 +1,9 @@
 import React from 'react';
-import { Recipe } from 'interfaces';
 import { Link } from 'react-router-dom';
-import { RecipeTimeOutput } from 'components/recipe';
+
 import RecentRecipeCard from '../card/RecentRecipeCard';
+
+import { Recipe } from 'interfaces';
 
 interface Props {
     recentRecipes: Recipe[];
