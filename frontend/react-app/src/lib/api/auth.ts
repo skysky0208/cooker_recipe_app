@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 import { SignUpParams, SignInParams } from 'interfaces';
 
-export const signUp = (params: SignUpParams) => {
+export const signUp = (params: FormData) => {
     return client.post('auth', params);
 };
 

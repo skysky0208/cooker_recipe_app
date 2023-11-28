@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
-import { Option } from 'interfaces';
+export interface Option {
+    value: string;
+    label: string;
+}
 
 interface DropdownListProps {
     options: Option[];
