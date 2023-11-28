@@ -45,9 +45,9 @@ const SarchSortArea: React.FC<SarchSortAreaProps> = ({ handleGetRecipes }) => {
     };
 
     return (
-        <div className="md:flex md:justify-center md:items-center ">
+        <div className="lg:flex lg:justify-center lg:items-center ">
             {/* 検索欄 */}
-            <div className="search-form md:w-1/2 md:mb-3">
+            <div className="search-form lg:w-1/2 lg:mb-3">
                 <div className="flex">
                     <label htmlFor="default-search" className="sr-only">
                         Search
@@ -94,7 +94,7 @@ const SarchSortArea: React.FC<SarchSortAreaProps> = ({ handleGetRecipes }) => {
             </div>
 
             {/* ソート欄 */}
-            <div className="sort-button text-xs md:text-base md:w-1/2">
+            <div className="sort-button text-xs lg:text-base lg:w-1/2">
                 <div className="flex justify-center">
                     {radioButtons.map((radio, index) => {
                         return (
