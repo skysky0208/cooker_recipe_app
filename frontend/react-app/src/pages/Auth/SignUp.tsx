@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import { AuthContext } from 'App';
@@ -13,7 +13,13 @@ const SignUp = () => {
     const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const { register, handleSubmit, getValues, trigger } = useForm<SignUpParams>();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+        getValues,
+        trigger,
+    } = useForm<SignUpParams>({ mode: 'onBlur' });
 
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
@@ -61,7 +67,10 @@ const SignUp = () => {
                     </div>
 
                     <div className="mt-5">
-                        <form className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2">
+                        <form
+                            className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2"
+                            onSubmit={handleSubmit(handleCreateUser)}
+                        >
                             <div>
                                 <label
                                     htmlFor="firstName"
@@ -70,14 +79,18 @@ const SignUp = () => {
                                     姓*
                                 </label>
                                 <input
-                                    {...register('firstName')}
+                                    {...register('firstName', {
+                                        required: '必須項目です。',
+                                    })}
                                     name="firstName"
                                     type="text"
                                     id="firstName"
-                                    required
                                     placeholder="鈴木"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.firstName && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.firstName.message}</span>
+                                )}
                             </div>
 
                             <div>
@@ -88,7 +101,9 @@ const SignUp = () => {
                                     名*
                                 </label>
                                 <input
-                                    {...register('lastName')}
+                                    {...register('lastName', {
+                                        required: '必須項目です。',
+                                    })}
                                     name="lastName"
                                     type="text"
                                     id="lastName"
@@ -96,6 +111,9 @@ const SignUp = () => {
                                     placeholder="太郎"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.lastName && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.lastName.message}</span>
+                                )}
                             </div>
 
                             <div className="sm:col-span-2">
@@ -106,7 +124,9 @@ const SignUp = () => {
                                     アカウント名
                                 </label>
                                 <input
-                                    {...register('nickname')}
+                                    {...register('nickname', {
+                                        required: '必須項目です。',
+                                    })}
                                     name="nickname"
                                     type="text"
                                     id="nickname"
@@ -114,6 +134,9 @@ const SignUp = () => {
                                     placeholder="nikniknik"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.nickname && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.nickname.message}</span>
+                                )}
                             </div>
 
                             <div className="sm:col-span-2">
@@ -121,14 +144,22 @@ const SignUp = () => {
                                     メールアドレス*
                                 </label>
                                 <input
-                                    {...register('email')}
+                                    {...register('email', {
+                                        required: '必須項目です。',
+                                        pattern: {
+                                            value: /^[\w\-._]+@[\w\-._]+\.[A-Za-z]+/,
+                                            message: '入力形式がメールアドレスではありません。',
+                                        },
+                                    })}
                                     type="email"
-                                    name="email"
                                     id="email"
                                     required
                                     placeholder="sample@sample.com"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.email && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.email.message}</span>
+                                )}
                             </div>
 
                             <div className="sm:col-span-2">
@@ -139,14 +170,27 @@ const SignUp = () => {
                                     パスワード*
                                 </label>
                                 <input
-                                    {...register('password')}
+                                    {...register('password', {
+                                        required: '必須項目です。',
+                                        minLength: {
+                                            value: 6,
+                                            message: '6文字以上入力してください',
+                                        },
+                                        onBlur: () => {
+                                            if (getValues('passwordConfirmation')) {
+                                                trigger('passwordConfirmation');
+                                            }
+                                        },
+                                    })}
                                     type="password"
-                                    name="password"
                                     id="password"
                                     required
                                     placeholder="6文字以上"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.password && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.password.message}</span>
+                                )}
                             </div>
 
                             <div className="sm:col-span-2">
@@ -158,35 +202,45 @@ const SignUp = () => {
                                 </label>
 
                                 <input
-                                    {...register('passwordConfirmation')}
+                                    {...register('passwordConfirmation', {
+                                        required: '確認のためパスワードを再入力してください。',
+                                        minLength: {
+                                            value: 6,
+                                            message: '6文字以上入力してください',
+                                        },
+                                        validate: (value: string) => {
+                                            return value === getValues('password') || 'パスワードが一致しません';
+                                        },
+                                    })}
                                     type="password"
-                                    name="passwordConfirmation"
                                     id="passwordConfirmation"
                                     required
                                     placeholder="6文字以上"
                                     className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
                                 />
+                                {errors.passwordConfirmation && (
+                                    <span className="text-sm text-red-600 mx-3">
+                                        {errors.passwordConfirmation.message}
+                                    </span>
+                                )}
                             </div>
 
                             <button
                                 type="submit"
-                                onClick={handleSubmit(handleCreateUser)}
+                                disabled={!isValid}
                                 className="mt-5 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300 transition-all text-sm"
                             >
                                 登録する
                             </button>
 
                             <button
-                                type="submit"
                                 onClick={() => {
                                     navigate('/');
                                 }}
-                                className=" md:mt-4 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-gray-400 font-semibold text-gray-700 hover:bg-gray-100 transition-all text-sm"
+                                className=" md:mt-4 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-gray-400 font-semibold text-gray-700 hover:bg-gray-100 text-sm"
                             >
                                 キャンセル
                             </button>
-                            <p></p>
-                            <p className="text-right w-full text-sm text-gray-500">*Required</p>
                         </form>
                     </div>
                 </div>
@@ -196,7 +250,7 @@ const SignUp = () => {
                 open={alertMessageOpen}
                 setOpen={setAlertMessageOpen}
                 severity="error"
-                message="ユーザ作成ができません"
+                message="すでに登録されているメールアドレスです。"
             />
         </>
     );
