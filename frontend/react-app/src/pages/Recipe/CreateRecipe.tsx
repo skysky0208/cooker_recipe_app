@@ -13,7 +13,7 @@ const CreateRecipe = () => {
         register,
         handleSubmit,
         setValue,
-        formState: { errors, isValid },
+        formState: { errors },
     } = useForm<RecipeData>();
     const navigate = useNavigate();
 

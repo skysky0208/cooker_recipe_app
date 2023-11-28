@@ -51,7 +51,7 @@ const SignIn = () => {
 
     return (
         <>
-            <div className="w-full md:w-1/2 bg-white border border-gray-200 md:rounded-xl shadow-sm">
+            <div className="w-full md:my-5 md:w-1/2 bg-white border border-gray-200 md:rounded-xl shadow-sm">
                 <div className="p-4 sm:p-7">
                     <div className="text-center">
                         <h1 className="block text-xl md:text-2xl text-center font-bold text-neutral-600">ログイン</h1>

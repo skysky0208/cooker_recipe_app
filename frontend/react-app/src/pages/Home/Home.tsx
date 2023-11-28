@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import RecentRecipeArea from 'components/home/area/RecentRecipesArea';
 import { RecommendedRecipeCard } from 'components/home';
@@ -9,8 +8,6 @@ import { Recipe } from 'interfaces';
 
 // とりあえず認証済みユーザーの名前やメールアドレスを表示
 const Home = () => {
-    const navigate = useNavigate();
-
     const [loading, setLoading] = useState<boolean>(true);
     const [recommendedRecipe, setRecommendedRecipe] = useState<Recipe>();
     const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
@@ -49,7 +46,7 @@ const Home = () => {
         <>
             {!loading ? (
                 <div className="bg-white border border-gray-200 my-5 lg:rounded-xl shadow-sm text-gray-600 lg:w-2/3">
-                    <img src={`${process.env.PUBLIC_URL}/title.png`} className="mx-auto my-5" />
+                    <img src={`${process.env.PUBLIC_URL}/title.png`} className="mx-auto my-5" alt="title-img" />
                     <RecommendedRecipeCard recommendedRecipe={recommendedRecipe} />
                     <RecentRecipeArea recentRecipes={recentRecipes} />
                 </div>

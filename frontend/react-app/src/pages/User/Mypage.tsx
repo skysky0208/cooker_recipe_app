@@ -40,7 +40,7 @@ const Mypage = () => {
     return (
         <>
             {!loading ? (
-                <div className="bg-white border border-gray-200 lg:rounded-xl shadow-sm text-gray-600 lg:w-2/3">
+                <div className="bg-white md:my-5 border border-gray-200 lg:rounded-xl shadow-sm text-gray-600 lg:w-2/3">
                     <div className="md:flex mt-5">
                         <div className="md:w-3/12 text-center md:px-4 md:py-8">
                             <div className="w-20 h-20 rounded-full inline-flex items-center justify-center bg-gray-200 text-gray-400">
