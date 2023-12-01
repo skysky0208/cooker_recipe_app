@@ -2,7 +2,17 @@
 
 電気圧力鍋を使ったレシピを投稿することができるアプリケーションを作成しました。
 
-https://web.pp-recipes.com
+URL：https://web.pp-recipes.com
+
+ゲストアカウント
+
+```
+メールアドレス：test@test.com
+パスワード：password
+```
+
+ポートフォリオの詳細は以下の Qiita に記載しております！
+https://qiita.com/skysky0208/private/f1658463390959e60974
 
 ## 1. 背景
 

@@ -28,3 +28,14 @@ export function formatIngredients(ingredients: Ingredient[]): string {
 
     return text;
 }
+
+export function formatCaption(caption: string): string {
+    const maxLength = 30;
+
+    if (caption.length <= maxLength) {
+        return caption;
+    }
+
+    // 指定された最大文字数までの部分文字列を取得し、省略記号を追加して返す
+    return caption.substring(0, maxLength ) + "...";
+}

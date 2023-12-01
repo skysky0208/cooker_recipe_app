@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { RecipeTimeOutput } from 'components/recipe';
 
+import { formatCaption } from 'function/recipe_function';
 import { Recipe } from 'interfaces';
 
 interface Props {
@@ -17,7 +18,7 @@ const RecentRecipeCard: React.FC<Props> = ({ recipe, index }) => {
                 <img className="h-40 w-full lg:h-48 object-cover" src={recipe.image.url} alt="recipe_img" />
                 <div className="md:h-44 p-5 text-orange-950">
                     <h1 className="title-font text-lg font-semibold mb-3">{recipe.title}</h1>
-                    <p className="leading-relaxed text-sm mb-3">{recipe.caption}</p>
+                    <p className="leading-relaxed text-sm mb-3">{formatCaption(recipe.caption)}</p>
                     <RecipeTimeOutput
                         preparationTime={recipe.preparationTime}
                         pressTime={recipe.pressTime}
