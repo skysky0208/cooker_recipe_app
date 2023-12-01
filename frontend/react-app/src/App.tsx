@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import CommonLayout from 'components/layouts/CommonLayout';
-import Home from 'pages/Home';
+import Home from 'pages/Home/Home';
 import SignIn from 'pages/Auth/SignIn';
 import SignUp from 'pages/Auth/SignUp';
 import EmailSend from 'pages/Auth/EmailSend';
@@ -14,6 +14,7 @@ import IndexRecipe from 'pages/Recipe/IndexRecipe';
 import { getCurrentUser } from 'lib/api/auth';
 import { User } from 'interfaces/index';
 import Mypage from 'pages/User/Mypage';
+import NotFound from 'pages/NotFound';
 
 // グローバルで扱う変数・関数
 export const AuthContext = createContext(
@@ -39,8 +40,6 @@ const App = () => {
             if (res?.data.isLogin === true) {
                 setIsSignedIn(true);
                 setCurrentUser(res?.data.data);
-
-                console.log(res?.data.data);
             } else {
                 console.log('No current user');
             }
@@ -85,14 +84,7 @@ const App = () => {
                         <Route path="signin" element={<SignIn />} />
                         <Route path="auth/send" element={<EmailSend />} />
                         <Route path="auth/success" element={<AuthSuccess />} />
-                        <Route
-                            path="/"
-                            element={
-                                <Private>
-                                    <Home />
-                                </Private>
-                            }
-                        />
+                        <Route path="/" element={<Home />} />
                         <Route path="/recipes" element={<IndexRecipe />} />
                         <Route path="/recipes/:id" element={<ShowRecipe />} />
                         <Route
@@ -120,6 +112,7 @@ const App = () => {
                                 </Private>
                             }
                         />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </CommonLayout>
             </AuthContext.Provider>

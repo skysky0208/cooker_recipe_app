@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Area, MediaSize } from 'react-easy-crop';
 import CropperModal from '../crop/CropperModel';
 import getCroppedImg from 'function/croppingImg_function';
+
 export const ASPECT_RATIO = 4 / 3;
 export const CROP_WIDTH = 400;
 

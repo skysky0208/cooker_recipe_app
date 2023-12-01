@@ -20,7 +20,13 @@ import { RecipeData, Recipe, Ingredient, RecipeFormData, Step } from 'interfaces
 import { updateRecipe, getRecipeForEdit } from 'lib/api/recipes';
 
 const EditRecipe = () => {
-    const { register, handleSubmit, setValue, watch } = useForm<RecipeData>();
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<RecipeData>();
 
     const navigate = useNavigate();
     const { id } = useParams<{ id: string | undefined }>();
@@ -48,7 +54,6 @@ const EditRecipe = () => {
     const handleGetRecipe = async () => {
         try {
             const res = await getRecipeForEdit(id);
-            console.log(res);
 
             if (res.data.status === 200 && res.data.recipe) {
                 setValue('title', res.data.recipe.title);
@@ -104,10 +109,10 @@ const EditRecipe = () => {
                     <form>
                         <div className="p-4 sm:p-7 flex justify-center ">
                             <div className="grid gap-y-4 w-full">
-                                <RecipeTitleInput register={register} isBorder={true} />
+                                <RecipeTitleInput register={register} isBorder={true} errors={errors} />
                                 <ImageInput defult_image_src={recipe?.image.url} setImage={setImage} />
 
-                                <RecipeTimeInput register={register} setValue={setValue} />
+                                <RecipeTimeInput register={register} setValue={setValue} errors={errors} />
                                 <RecipeCaptionInput register={register} />
 
                                 <div className="grid gap-4 md:flex">

@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-
-import { Grid, TextField, CardContent, Button, Box, Typography } from '@mui/material';
-import { CustomCard, CustomCardHeader } from 'components/auth/styles';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 import { AuthContext } from 'App';
 import Cookies from 'js-cookie';
@@ -15,36 +13,32 @@ const SignUp = () => {
     const { setIsSignedIn, setCurrentUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [nickname, setNickname] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+        getValues,
+        trigger,
+    } = useForm<SignUpParams>({ mode: 'onBlur' });
+
     const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
-    const generateParams = () => {
-        const data: SignUpParams = {
-            firstName: firstName,
-            lastName: lastName,
-            nickname: nickname,
-            email: email,
-            password: password,
-            passwordConfirmation: passwordConfirmation,
-        };
-        return data;
+    const createFormData = (data: any) => {
+        const formData = new FormData();
+
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+        });
+
+        return formData;
     };
 
-    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        const params = generateParams();
-
+    const handleCreateUser = async (data: SignUpParams) => {
         try {
-            const res = await signUp(params);
-            console.log(res);
+            const formdata = createFormData(data);
+            const res = await signUp(formdata);
 
             if (res.status === 200) {
-                console.log('confirm email');
                 Cookies.set('_access_token', res.headers['access-token']);
                 Cookies.set('_client', res.headers['client']);
                 Cookies.set('_uid', res.headers['uid']);
@@ -53,7 +47,6 @@ const SignUp = () => {
                 setCurrentUser(res.data.data);
 
                 navigate('/mypage', { replace: true });
-                // navigate('/auth/send', { replace: true });
             } else {
                 setAlertMessageOpen(true);
             }
@@ -65,133 +58,199 @@ const SignUp = () => {
 
     return (
         <>
-            <form noValidate autoComplete="off">
-                <CustomCard>
-                    <CustomCardHeader title="新規会員登録" style={{ textAlign: 'center' }} />
-                    <CardContent>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    style={{ marginRight: '20px' }}
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label="姓"
-                                    size="small"
-                                    value={lastName}
-                                    margin="dense"
-                                    onChange={(event) => setLastName(event.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    label="名"
-                                    size="small"
-                                    value={firstName}
-                                    margin="dense"
-                                    onChange={(event) => setFirstName(event.target.value)}
-                                />
-                            </Grid>
-                        </Grid>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            size="small"
-                            label="アカウント名"
-                            value={nickname}
-                            margin="dense"
-                            onChange={(event) => setNickname(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            size="small"
-                            label="メールアドレス"
-                            value={email}
-                            margin="dense"
-                            onChange={(event) => setEmail(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            size="small"
-                            label="パスワード"
-                            type="password"
-                            placeholder="6文字以上"
-                            value={password}
-                            margin="dense"
-                            autoComplete="current-password"
-                            onChange={(event) => setPassword(event.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            size="small"
-                            placeholder="6文字以上"
-                            label="パスワード（確認用）"
-                            type="password"
-                            value={passwordConfirmation}
-                            margin="dense"
-                            autoComplete="current-password"
-                            onChange={(event) => setPasswordConfirmation(event.target.value)}
-                        />
+            <div className="w-full md:mx-10 md:my-5 lg:w-1/2 bg-white border border-gray-200 md:rounded-xl shadow-sm">
+                <div className="p-4 sm:p-7">
+                    <div className="text-center">
+                        <h1 className="block text-xl md:text-2xl text-center font-bold text-neutral-600">
+                            新規会員登録
+                        </h1>
+                    </div>
 
-                        <Box textAlign="center" style={{ margin: '20px 0' }}>
-                            <Typography variant="body2">
-                                入力内容送信後に登録認証メールが届きます。
-                                <br />
-                                メール記載のURLにアクセスしていただくことで
-                                <br />
-                                会員登録完了となります。
-                                <br />
-                                <br />
-                                ※メールが届かない場合、
-                                <br />
-                                迷惑メール設定・ドメイン指定受信設定をご確認ください。
-                            </Typography>
-                        </Box>
+                    <div className="mt-5">
+                        <form
+                            className="mx-auto grid max-w-screen-md gap-4 sm:grid-cols-2"
+                            onSubmit={handleSubmit(handleCreateUser)}
+                        >
+                            <div>
+                                <label
+                                    htmlFor="firstName"
+                                    className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
+                                >
+                                    姓*
+                                </label>
+                                <input
+                                    {...register('firstName', {
+                                        required: '必須項目です。',
+                                    })}
+                                    name="firstName"
+                                    type="text"
+                                    id="firstName"
+                                    placeholder="鈴木"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.firstName && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.firstName.message}</span>
+                                )}
+                            </div>
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            size="large"
-                            fullWidth
-                            disabled={
-                                !firstName! || !lastName || !nickname || !email || !password || !passwordConfirmation
-                                    ? true
-                                    : false
-                            }
-                            onClick={handleSubmit}
-                        >
-                            登録する
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="outlined"
-                            size="large"
-                            style={{ marginTop: '10px' }}
-                            fullWidth
-                            onClick={() => {
-                                navigate('/');
-                            }}
-                        >
-                            キャンセル
-                        </Button>
-                    </CardContent>
-                </CustomCard>
-            </form>
+                            <div>
+                                <label
+                                    htmlFor="lastName"
+                                    className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
+                                >
+                                    名*
+                                </label>
+                                <input
+                                    {...register('lastName', {
+                                        required: '必須項目です。',
+                                    })}
+                                    name="lastName"
+                                    type="text"
+                                    id="lastName"
+                                    required
+                                    placeholder="太郎"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.lastName && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.lastName.message}</span>
+                                )}
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label
+                                    htmlFor="nickname"
+                                    className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
+                                >
+                                    アカウント名
+                                </label>
+                                <input
+                                    {...register('nickname', {
+                                        required: '必須項目です。',
+                                    })}
+                                    name="nickname"
+                                    type="text"
+                                    id="nickname"
+                                    required
+                                    placeholder="nikniknik"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.nickname && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.nickname.message}</span>
+                                )}
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label htmlFor="email" className="mb-2 inline-block text-sm text-gray-800 sm:text-base">
+                                    メールアドレス*
+                                </label>
+                                <input
+                                    {...register('email', {
+                                        required: '必須項目です。',
+                                        pattern: {
+                                            value: /^[\w\-._]+@[\w\-._]+\.[A-Za-z]+/,
+                                            message: '入力形式がメールアドレスではありません。',
+                                        },
+                                    })}
+                                    type="email"
+                                    id="email"
+                                    required
+                                    placeholder="sample@sample.com"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.email && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.email.message}</span>
+                                )}
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label
+                                    htmlFor="password"
+                                    className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
+                                >
+                                    パスワード*
+                                </label>
+                                <input
+                                    {...register('password', {
+                                        required: '必須項目です。',
+                                        minLength: {
+                                            value: 6,
+                                            message: '6文字以上入力してください',
+                                        },
+                                        onBlur: () => {
+                                            if (getValues('passwordConfirmation')) {
+                                                trigger('passwordConfirmation');
+                                            }
+                                        },
+                                    })}
+                                    type="password"
+                                    id="password"
+                                    required
+                                    placeholder="6文字以上"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.password && (
+                                    <span className="text-sm text-red-600 mx-3">{errors.password.message}</span>
+                                )}
+                            </div>
+
+                            <div className="sm:col-span-2">
+                                <label
+                                    htmlFor="passwordConfirmation"
+                                    className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
+                                >
+                                    パスワード(確認用)*
+                                </label>
+
+                                <input
+                                    {...register('passwordConfirmation', {
+                                        required: '確認のためパスワードを再入力してください。',
+                                        minLength: {
+                                            value: 6,
+                                            message: '6文字以上入力してください',
+                                        },
+                                        validate: (value: string) => {
+                                            return value === getValues('password') || 'パスワードが一致しません';
+                                        },
+                                    })}
+                                    type="password"
+                                    id="passwordConfirmation"
+                                    required
+                                    placeholder="6文字以上"
+                                    className="w-full rounded border px-3 py-2 text-gray-800 outline-none ring-orange-300 transition duration-100 focus:ring"
+                                />
+                                {errors.passwordConfirmation && (
+                                    <span className="text-sm text-red-600 mx-3">
+                                        {errors.passwordConfirmation.message}
+                                    </span>
+                                )}
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={!isValid}
+                                className="mt-5 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300 transition-all text-sm"
+                            >
+                                登録する
+                            </button>
+
+                            <button
+                                onClick={() => {
+                                    navigate('/');
+                                }}
+                                className=" md:mt-4 mx-10 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-gray-400 font-semibold text-gray-700 hover:bg-gray-100 text-sm"
+                            >
+                                キャンセル
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <AlertMessage // エラーが発生した場合はアラートを表示
                 open={alertMessageOpen}
                 setOpen={setAlertMessageOpen}
                 severity="error"
-                message="メールアドレスかパスワードが間違っています"
+                message="すでに登録されているメールアドレスです。"
             />
         </>
     );

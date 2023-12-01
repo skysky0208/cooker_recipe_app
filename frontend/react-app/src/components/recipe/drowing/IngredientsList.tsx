@@ -1,5 +1,6 @@
-import { Ingredient } from 'interfaces';
 import React from 'react';
+
+import { Ingredient } from 'interfaces';
 
 interface Props {
     servings: number;

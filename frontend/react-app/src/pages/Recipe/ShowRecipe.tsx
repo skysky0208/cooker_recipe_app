@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { AuthorOutput, IngredientsList, RecipeTimeOutput, StepsList } from 'components/recipe';
+
 import { RecipeDataForShow } from 'interfaces';
 import { getRecipe } from 'lib/api/recipes';
-import { AuthorOutput, IngredientsList, RecipeTimeOutput, StepsList } from 'components/recipe';
 
 const ShowRecipe = () => {
     const { id } = useParams<{ id: string | undefined }>();
@@ -26,7 +27,6 @@ const ShowRecipe = () => {
     const handleGetRecipe = async () => {
         try {
             const res = await getRecipe(id);
-            console.log(res);
 
             if (res.data.status === 200 && res.data.recipe) {
                 setRecipe(res.data.recipe);

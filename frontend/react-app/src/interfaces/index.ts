@@ -109,8 +109,3 @@ export interface Pagination {
     limit_value: number;
     pages: number;
 }
-
-export interface Option {
-    value: string;
-    label: string;
-}

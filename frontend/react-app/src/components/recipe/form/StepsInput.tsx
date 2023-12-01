@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import AlertMessage from 'components/common/AlertMessage';
@@ -152,7 +151,7 @@ const StepsInput: React.FC<StepsInputProps> = ({ viewFlag, setViewFlag, steps, s
                         </button>
                         <button
                             type="submit"
-                            className="block mx-auto mt-2 py-2 px-10 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
+                            className="block mx-auto mb-5 mt-2 py-2 px-10 gap-2 rounded-md border border-transparent font-semibold bg-orange-400 text-white hover:bg-orange-300"
                         >
                             保存する
                         </button>

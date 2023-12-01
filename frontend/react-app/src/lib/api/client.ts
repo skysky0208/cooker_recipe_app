@@ -7,7 +7,8 @@ const options = {
 
 const client = applyCaseMiddleware(
     axios.create({
-        baseURL: 'https://api.pp-recipes.com/api/v1',
+        // baseURL: 'https://api.pp-recipes.com/api/v1',
+        baseURL: 'http://localhost:3001/api/v1',
     }),
     options
 );
