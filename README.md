@@ -2,7 +2,8 @@
 
 電気圧力鍋を使ったレシピを投稿することができるアプリケーションを作成しました。
 
-URL：https://web.pp-recipes.com
+~~URL：https://web.pp-recipes.com~~
+公開停止しました(2024.2.15)
 
 ゲストアカウント
 
